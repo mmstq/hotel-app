@@ -62,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildRoomList() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Column(
         children: [
           Expanded(
@@ -95,13 +95,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       height: MediaQuery.sizeOf(context).height * 0.2,
       decoration: BoxDecoration(
-        color:Get.theme.cardColor,
+        color: Get.theme.cardColor,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.2), // Shadow color
-              spreadRadius: 2, // Spread radius
-              blurRadius: 8, // Blur radius
+              color: Get.theme.dividerColor.withOpacity(0.2), // Shadow color
+              spreadRadius: 1, // Spread radius
+              blurRadius: 4, // Blur radius
               offset: const Offset(0, 4))
           // Shadow position (horizontal, vertical)
         ],
@@ -111,8 +111,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Align(
-            child: SizedBox(height: 90,
-              child: Image.asset('assets/room_icon.png',fit: BoxFit.cover,),
+            child: SizedBox(
+              height: 90,
+              child: Image.asset(
+                'assets/room_icon.png',
+                fit: BoxFit.cover,
+                color: Get.theme.primaryColorLight,
+              ),
             ),
           ),
           Padding(
@@ -124,7 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('\$${room.price} / night'),
+            child: Text('\$${room.price} / mint'),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -132,8 +137,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               label: 'Book Now',
               height: 40,
               onPressed: () {
-                // Handle room booking or details
-                Get.snackbar('Room Selected', 'You selected ${room.type}');
+                Navigator.pushNamed(context, '/book-room', arguments: room);
               },
             ),
           ),

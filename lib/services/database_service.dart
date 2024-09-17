@@ -8,44 +8,52 @@ class DatabaseService {
       Room(
         number: 101,
         type: 'Deluxe',
-        price: 120,
+        price: 80,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_1.jpg',
+        amenities: '2 RestRoom, 2 King size bed, Well maintained,'
+            'Window city view , fully furnished',
       ),
       Room(
         number: 102,
         type: 'Standard',
-        price: 80,
+        price: 30,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_2.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 103,
         type: 'Suite',
-        price: 200,
+        price: 50,
         isAvailable: false,
         imageUrl: 'assets/hotel_room_3.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 104,
         type: 'Single',
-        price: 50,
+        price: 5,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_4.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 105,
         type: 'Double',
-        price: 100,
+        price: 10,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_5.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 106,
         type: 'Deluxe',
-        price: 80,
+        price: 20,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_6.jpg',
+        amenities: '2 RestRoom, 2 King size bed, Well maintained'
+            ',Window city view , fully furnished',
       ),
       Room(
         number: 107,
@@ -53,6 +61,7 @@ class DatabaseService {
         price: 200,
         isAvailable: false,
         imageUrl: 'assets/hotel_room_7.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 108,
@@ -60,6 +69,7 @@ class DatabaseService {
         price: 50,
         isAvailable: true,
         imageUrl: 'assets/room_1.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 109,
@@ -67,6 +77,7 @@ class DatabaseService {
         price: 100,
         isAvailable: true,
         imageUrl: 'assets/room_2.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 110,
@@ -74,6 +85,7 @@ class DatabaseService {
         price: 80,
         isAvailable: true,
         imageUrl: 'assets/room_3.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 111,
@@ -81,6 +93,8 @@ class DatabaseService {
         price: 200,
         isAvailable: false,
         imageUrl: 'assets/room_4.jpg',
+        amenities:'2 RestRoom, 2 King size bed, '
+            'Well maintained,Window city view , fully furnished',
       ),
       Room(
         number: 112,
@@ -88,6 +102,7 @@ class DatabaseService {
         price: 50,
         isAvailable: true,
         imageUrl: 'assets/room_5.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 113,
@@ -95,34 +110,39 @@ class DatabaseService {
         price: 100,
         isAvailable: true,
         imageUrl: 'assets/room_6.jpg',
+        amenities: '1 RestRoom,Double bed',
       ),
       Room(
         number: 114,
         type: 'Standard',
-        price: 80,
+        price: 30,
         isAvailable: true,
-        imageUrl:'assets/room_7.jpg',
+        imageUrl: 'assets/room_7.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 115,
         type: 'Suite',
-        price: 200,
+        price: 50,
         isAvailable: false,
-        imageUrl:'assets/room_8.jpg',
+        imageUrl: 'assets/room_8.jpg',
+        amenities: '1 RestRoom,King size bed',
       ),
       Room(
         number: 116,
         type: 'Single',
-        price: 50,
+        price: 20,
         isAvailable: true,
         imageUrl: 'assets/room_9.jpg',
+        amenities: '1 RestRoom,Single bed',
       ),
       Room(
         number: 117,
         type: 'single',
-        price: 100,
+        price: 20,
         isAvailable: true,
         imageUrl: 'assets/room_10.jpg',
+        amenities: '1 RestRoom,Single bed',
       ),
     ];
   }

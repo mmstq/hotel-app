@@ -34,7 +34,7 @@ class InputButton extends StatelessWidget {
         style: ButtonStyle(
           elevation: WidgetStateProperty.all(elevation),
           backgroundColor:
-          WidgetStateProperty.all(backgroundColor ?? Colors.blueAccent.shade700),
+          WidgetStateProperty.all(backgroundColor ?? Colors.blue),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           ),
