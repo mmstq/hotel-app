@@ -28,8 +28,16 @@ class SignUpScreen extends StatelessWidget {
                 style: Get.textTheme.displaySmall!.copyWith(
                     color: Colors.black87, fontWeight: FontWeight.w700),
               ),
+            ),const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Luxury rooms are waiting for you",
+                style: Get.textTheme.bodySmall!
+                    .copyWith(color: Colors.grey.shade700, fontSize: 14),
+              ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 40),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -39,7 +47,7 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 10,
             ),
             TextInputField(
               label: 'Email ',
@@ -65,7 +73,7 @@ class SignUpScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Don\'t have an account?'),
+                const Text('Already have an account?'),
                 TextButton(
                   onPressed: () {
                     Get.toNamed('/login');

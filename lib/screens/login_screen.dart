@@ -25,12 +25,21 @@ class LoginScreen extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Welcome!",
+                "Welcome back!",
                 style: Get.textTheme.displaySmall!.copyWith(
                     color: Colors.black87, fontWeight: FontWeight.w700),
               ),
             ),
             const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Your luxurious room is waiting for you",
+                style: Get.textTheme.bodySmall!
+                    .copyWith(color: Colors.grey.shade700, fontSize: 14),
+              ),
+            ),
+            const SizedBox(height: 40),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -40,7 +49,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 10,
             ),
             TextInputField(
               label: 'Email ',

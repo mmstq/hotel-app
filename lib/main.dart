@@ -1,14 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/firebase_options.dart';
+import 'package:hotel_app/screens/dashboard.dart';
 import 'package:hotel_app/screens/sign_up.dart';
 import 'screens/login_screen.dart';
 import 'screens/room_list_screen.dart';
 import 'screens/booking_screen.dart';
 import 'screens/booking_history_screen.dart';
 import 'screens/guest_management_screen.dart';
-import 'screens/settings_screen.dart';
+import 'screens/account_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -28,16 +28,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
+      initialRoute: '/dashboard',
       getPages: [
         GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(name: '/signUP', page: () => SignUpScreen()),
         GetPage(name: '/rooms', page: () => RoomListScreen()),
+        GetPage(name: '/dashboard', page: () => DashboardScreen()),
         GetPage(
             name: '/book-room', page: () => BookingScreen(room: Get.arguments)),
         GetPage(name: '/booking-history', page: () => BookingHistoryScreen()),
         GetPage(name: '/guest-management', page: () => GuestManagementScreen()),
-        GetPage(name: '/settings', page: () => SettingsScreen()),
+        GetPage(name: '/settings', page: () => AccountScreen()),
       ],
     );
   }
