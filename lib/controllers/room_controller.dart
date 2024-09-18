@@ -45,4 +45,13 @@ class RoomController extends GetxController {
       filteredRooms.value = rooms.where((room) => room.type == type).toList();
     }
   }
+
+  // Sorting rooms by price
+  void sortRoomsByPrice(String sortOrder) {
+    if (sortOrder == 'LowToHigh') {
+      rooms.sort((a, b) => a.price!.compareTo(b.price as num)); // Ascending order
+    } else if (sortOrder == 'HighToLow') {
+      rooms.sort((a, b) => b.price!.compareTo(a.price as num)); // Descending order
+    }
+  }
 }

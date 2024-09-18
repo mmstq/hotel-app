@@ -17,47 +17,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _selectedIndex == 0
-            ? const Text('Find Your Room')
-            : const Text('Account'),
-        actions: _selectedIndex == 0
-            ? [
-                IconButton(
-                  icon: const Icon(Icons.filter_list),
-                  onPressed: () {
-                    _showFilterDialog(context);
-                  },
-                ),
-              ]
-            : [],
-      ),
-      body: _selectedIndex == 0 ? _buildRoomList() : AccountScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 0
-                ? const Icon(CupertinoIcons.bed_double_fill)
-                : const Icon(
-                    CupertinoIcons.bed_double,
+        appBar: AppBar(
+          title: _selectedIndex == 0
+              ? const Text('Find Your Room')
+              : const Text('Account'),
+          actions: _selectedIndex == 0
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    onPressed: () {
+                      _showFilterDialog(context);
+                    },
                   ),
-            label: 'Rooms',
+                ]
+              : [],
+        ),
+        body: _selectedIndex == 0 ? _buildRoomList() : AccountScreen(),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            splashFactory: NoSplash.splashFactory, // Disable ripple effect
+            highlightColor: Colors.transparent, // Remove highlight on tap
           ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 1
-                ? const Icon(CupertinoIcons.person_alt_circle_fill)
-                : const Icon(CupertinoIcons.person_alt_circle),
-            label: 'Account',
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  width: 1,
+                  color: Get.theme.dividerColor.withOpacity(0.5),
+                ),
+              ),
+            ),
+            child: BottomNavigationBar(
+              showUnselectedLabels: false,
+              currentIndex: _selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 0
+                      ? const Icon(CupertinoIcons.bed_double_fill)
+                      : const Icon(CupertinoIcons.bed_double),
+                  label: 'Rooms',
+                ),
+                BottomNavigationBarItem(
+                  icon: _selectedIndex == 1
+                      ? const Icon(CupertinoIcons.person_alt_circle_fill)
+                      : const Icon(CupertinoIcons.person_alt_circle),
+                  label: 'Account',
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _buildRoomList() {
@@ -96,7 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       height: MediaQuery.sizeOf(context).height * 0.2,
       decoration: BoxDecoration(
         color: Get.theme.cardColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
               color: Get.theme.dividerColor.withOpacity(0.2), // Shadow color
@@ -112,7 +126,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Align(
             child: SizedBox(
-              height: 90,
+              height: MediaQuery.sizeOf(context).height * 0.1,
               child: Image.asset(
                 'assets/room_icon.png',
                 fit: BoxFit.cover,
@@ -121,15 +135,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 8.0),
             child: Text(
-              '${room.type} Room',
+              '${room.type}',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('\$${room.price} / mint'),
+            child: Text('\$${room.price} / minute'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              '${room.amenities}',
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color:
+                    Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -151,56 +176,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Filter Rooms'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // When "All Rooms" is selected, no filters are applied and all rooms are shown
-              ListTile(
-                title: const Text('All Rooms'),
-                onTap: () {
-                  roomController.filterRoomsByType(
-                      'All'); // Show all rooms if no filter selected
-                  Get.back();
-                },
-                selected: roomController.selectedFilter.value == 'All',
-              ),
-              ListTile(
-                title: const Text('Deluxe'),
-                onTap: () {
-                  roomController.filterRoomsByType('Deluxe');
-                  Get.back();
-                },
-              ),
-              ListTile(
-                title: const Text('Suite'),
-                onTap: () {
-                  roomController.filterRoomsByType('Suite');
-                  Get.back();
-                },
-              ),
-              ListTile(
-                title: const Text('Standard'),
-                onTap: () {
-                  roomController.filterRoomsByType('Standard');
-                  Get.back();
-                },
-              ),
-              ListTile(
-                title: const Text('Single'),
-                onTap: () {
-                  roomController.filterRoomsByType('Single');
-                  Get.back();
-                },
-              ),
-              ListTile(
-                title: const Text('Double'),
-                onTap: () {
-                  roomController.filterRoomsByType('Double');
-                  Get.back();
-                },
-              ),
-            ],
+          title: const Text('Filter and Sort Rooms'),
+          content: SingleChildScrollView( // Using SingleChildScrollView to handle potential overflow
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Expansion tile for room types
+                ExpansionTile(
+                  title: const Text("Filter by Type"),
+                  children: [
+                    ListTile(
+                      title: const Text('All Rooms'),
+                      onTap: () {
+                        roomController.filterRoomsByType('All');
+                        Get.back();
+                      },
+                      selected: roomController.selectedFilter.value == 'All',
+                    ),
+                    ListTile(
+                      title: const Text('Deluxe'),
+                      onTap: () {
+                        roomController.filterRoomsByType('Deluxe');
+                        Get.back();
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Suite'),
+                      onTap: () {
+                        roomController.filterRoomsByType('Suite');
+                        Get.back();
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Standard'),
+                      onTap: () {
+                        roomController.filterRoomsByType('Standard');
+                        Get.back();
+                      },
+                    ),
+                  ],
+                ),
+                // Expansion tile for sorting
+                ExpansionTile(
+                  title: const Text("Sort by Price"),
+                  children: [
+                    ListTile(
+                      title: const Text('Low to High'),
+                      onTap: () {
+                        roomController.sortRoomsByPrice('LowToHigh');
+                        Get.back();
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('High to Low'),
+                      onTap: () {
+                        roomController.sortRoomsByPrice('HighToLow');
+                        Get.back();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

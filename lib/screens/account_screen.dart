@@ -39,7 +39,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 GestureDetector(
                   onTap: _pickImage, // Open image picker on tap
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: 70,
                     backgroundImage: _image != null
                         ? FileImage(
                             File(_image!.path),
@@ -61,8 +61,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   },
                 ),
                 ListTile(
-                  title: const Text('Previous Rooms'),
-                  subtitle: const Text('Previously booked rooms'),
+                  title: const Text('Booked Rooms'),
+                  subtitle: const Text('Your past and upcoming bookings'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     // Implement profile update logic

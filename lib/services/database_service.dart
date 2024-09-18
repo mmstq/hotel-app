@@ -32,7 +32,7 @@ class DatabaseService {
       ),
       Room(
         number: 104,
-        type: 'Single',
+        type: 'Standard',
         price: 5,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_4.jpg',
@@ -40,7 +40,7 @@ class DatabaseService {
       ),
       Room(
         number: 105,
-        type: 'Double',
+        type: 'Deluxe',
         price: 10,
         isAvailable: true,
         imageUrl: 'assets/hotel_room_5.jpg',
@@ -65,7 +65,7 @@ class DatabaseService {
       ),
       Room(
         number: 108,
-        type: 'Single',
+        type: 'Standard',
         price: 50,
         isAvailable: true,
         imageUrl: 'assets/room_1.jpg',
@@ -73,7 +73,7 @@ class DatabaseService {
       ),
       Room(
         number: 109,
-        type: 'Double',
+        type: 'Suit',
         price: 100,
         isAvailable: true,
         imageUrl: 'assets/room_2.jpg',
@@ -98,7 +98,7 @@ class DatabaseService {
       ),
       Room(
         number: 112,
-        type: 'Single',
+        type: 'Suit',
         price: 50,
         isAvailable: true,
         imageUrl: 'assets/room_5.jpg',
@@ -106,7 +106,7 @@ class DatabaseService {
       ),
       Room(
         number: 113,
-        type: 'Double',
+        type: 'Standard',
         price: 100,
         isAvailable: true,
         imageUrl: 'assets/room_6.jpg',
@@ -130,7 +130,7 @@ class DatabaseService {
       ),
       Room(
         number: 116,
-        type: 'Single',
+        type: 'Deluxe',
         price: 20,
         isAvailable: true,
         imageUrl: 'assets/room_9.jpg',
@@ -138,7 +138,7 @@ class DatabaseService {
       ),
       Room(
         number: 117,
-        type: 'single',
+        type: 'Suit',
         price: 20,
         isAvailable: true,
         imageUrl: 'assets/room_10.jpg',

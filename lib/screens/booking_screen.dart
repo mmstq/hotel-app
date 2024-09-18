@@ -4,6 +4,7 @@ import 'package:hotel_app/components/custom_input_widgets.dart';
 import 'package:hotel_app/components/input_button.dart';
 import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/models/user.dart';
+import 'package:hotel_app/screens/payment_screen.dart';
 import '../controllers/booking_controller.dart';
 import '../models/booking.dart';
 
@@ -50,8 +51,11 @@ class BookingScreen extends StatelessWidget {
                     ),
                     Text(
                       room.type,
-                      style: Get.theme.textTheme.headlineLarge!
-                          .copyWith(fontWeight: FontWeight.bold, fontSize: 30),
+                      style: Get.theme.textTheme.headlineLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.blue,
+                      ),
                     ),
                   ],
                 ),
@@ -63,7 +67,7 @@ class BookingScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Price/mint',
+                      'Price/minute',
                       style: Get.theme.textTheme.headlineLarge!.copyWith(
                           fontSize: 14,
                           color: Get.theme.textTheme.labelSmall!.color
@@ -71,8 +75,11 @@ class BookingScreen extends StatelessWidget {
                     ),
                     Text(
                       ' \$${room.price} ',
-                      style: Get.theme.textTheme.headlineLarge!
-                          .copyWith(fontWeight: FontWeight.bold, fontSize: 30),
+                      style: Get.theme.textTheme.headlineLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.blue,
+                      ),
                     ),
                   ],
                 ),
@@ -91,15 +98,16 @@ class BookingScreen extends StatelessWidget {
                             color: Get.theme.textTheme.labelSmall!.color
                                 ?.withOpacity(0.7)),
                       ),
-                      SizedBox(height: 60,
+                      SizedBox(
+                        height: 60,
                         child: Text(
                           '${room.amenities} ',
                           maxLines: 4,
                           overflow: TextOverflow.clip,
                           style: Get.theme.textTheme.headlineLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.grey.shade600),
                         ),
                       ),
                     ],
@@ -114,109 +122,6 @@ class BookingScreen extends StatelessWidget {
             const TimePickerWidget(
               label: 'Check-out-time',
             ),
-            // TextInputField(
-            //   isReadOnly: true,
-            //   label: 'Check-In Time',
-            //   controller: _checkInDateController,
-            //   onTap: () async {
-            //     TimeOfDay? picked = await showTimePicker(
-            //       context: context,
-            //       initialTime: TimeOfDay.now(),
-            //     );
-            //     if (picked != null) {
-            //       // Format time in a readable format
-            //       final now = DateTime.now();
-            //       final formattedTime = DateTime(
-            //         now.year,
-            //         now.month,
-            //         now.day,
-            //         picked.hour,
-            //         picked.minute,
-            //       );
-            //       _checkInDateController.text = formattedTime.toString();
-            //     }
-            //   },
-            // ),
-            // TextField(
-            //   readOnly: true,
-            //   controller: _checkInDateController,
-            //   decoration: const InputDecoration(
-            //     labelText: 'Check-In Time',
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.all(Radius.circular(8)),
-            //     ),
-            //   ),
-            //   onTap: () async {
-            //     TimeOfDay? picked = await showTimePicker(
-            //       context: context,
-            //       initialTime: TimeOfDay.now(),
-            //     );
-            //     if (picked != null) {
-            //       // Format time in a readable format
-            //       final now = DateTime.now();
-            //       final formattedTime = DateTime(
-            //         now.year,
-            //         now.month,
-            //         now.day,
-            //         picked.hour,
-            //         picked.minute,
-            //       );
-            //       _checkInDateController.text = formattedTime.toString();
-            //     }
-            //   },
-            // ),
-            // const SizedBox(height: 10),
-            // TextInputField(
-            //   isReadOnly: true,
-            //   controller: _checkOutDateController,
-            //   label: 'Check-Out Time',
-            //   onTap: () async {
-            //     TimeOfDay? picked = await showTimePicker(
-            //       context: context,
-            //       initialTime: TimeOfDay.now(),
-            //     );
-            //     if (picked != null) {
-            //       // Format time in a readable format
-            //       final now = DateTime.now();
-            //       final formattedTime = DateTime(
-            //         now.year,
-            //         now.month,
-            //         now.day,
-            //         picked.hour,
-            //         picked.minute,
-            //       );
-            //       _checkOutDateController.text = formattedTime.toString();
-            //     }
-            //   },
-            // ),
-            // TextField(
-            //   readOnly: true,
-            //   controller: _checkOutDateController,
-            //   decoration: const InputDecoration(
-            //     labelText: 'Check-Out Time',
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.all(Radius.circular(8)),
-            //     ),
-            //   ),
-            //   onTap: () async {
-            //     TimeOfDay? picked = await showTimePicker(
-            //       context: context,
-            //       initialTime: TimeOfDay.now(),
-            //     );
-            //     if (picked != null) {
-            //       // Format time in a readable format
-            //       final now = DateTime.now();
-            //       final formattedTime = DateTime(
-            //         now.year,
-            //         now.month,
-            //         now.day,
-            //         picked.hour,
-            //         picked.minute,
-            //       );
-            //       _checkOutDateController.text = formattedTime.toString();
-            //     }
-            //   },
-            // ),
           ],
         ),
       ),
@@ -225,20 +130,22 @@ class BookingScreen extends StatelessWidget {
         child: InputButton(
           label: 'Book Now',
           onPressed: () {
-            User user = User(
-                id: '1',
-                name: 'John Doe',
-                email: 'john@example.com',
-                role: 'guest'); // Example user
-            Booking booking = Booking(
-              id: DateTime.now().toString(),
-              room: room,
-              user: user,
-              checkInDate: DateTime.parse(_checkInDateController.text),
-              checkOutDate: DateTime.parse(_checkOutDateController.text),
-            );
-            bookingController.createBooking(booking);
-            Get.back();
+            Navigator.push(context,
+                MaterialPageRoute( builder: (context) => PaymentScreen()));
+            // User user = User(
+            //     id: '1',
+            //     name: 'John Doe',
+            //     email: 'john@example.com',
+            //     role: 'guest'); // Example user
+            // Booking booking = Booking(
+            //   id: DateTime.now().toString(),
+            //   room: room,
+            //   user: user,
+            //   checkInDate: DateTime.parse(_checkInDateController.text),
+            //   checkOutDate: DateTime.parse(_checkOutDateController.text),
+            // );
+            // bookingController.createBooking(booking);
+            // Get.back();
           },
         ),
       ),

@@ -238,15 +238,17 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                 ? widget.fillColor
                 : Colors.grey.withOpacity(0.5),
             border: Border.all(
-              color: widget.errorText != null || showError
-                  ? Colors.red
-                  : Colors.grey.withOpacity(0.5),
-            ),
+                color: widget.errorText != null || showError
+                    ? Colors.red
+                    : widget.value == null
+                        ? Colors.grey.withOpacity(0.6)
+                        : Colors.blue,
+                width: 1.5),
           ),
           child: TextFormField(
             onTapOutside: (event) {
               Focus.of(context).unfocus();
-            },
+            },cursorColor: Colors.transparent,
             controller: controller,
             enableInteractiveSelection: false,
             enabled: widget.enabled,
@@ -266,7 +268,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                 child: widget.prefixIcon ??
                     const Icon(
                       CupertinoIcons.time_solid,
-                      color: Colors.grey,
+                      color: Colors.blue,
                     ),
               ),
               suffixIcon: widget.suffixIcon,
