@@ -7,8 +7,7 @@ import '../controllers/auth_controller.dart';
 class SignUpScreen extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+
 
   SignUpScreen({super.key});
 
@@ -26,9 +25,10 @@ class SignUpScreen extends StatelessWidget {
               child: Text(
                 "Welcome!",
                 style: Get.textTheme.displaySmall!.copyWith(
-                    color: Colors.black87, fontWeight: FontWeight.w700),
+                   fontWeight: FontWeight.w700),
               ),
-            ),const SizedBox(height: 4),
+            ),
+            const SizedBox(height: 4),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -51,21 +51,41 @@ class SignUpScreen extends StatelessWidget {
             ),
             TextInputField(
               label: 'Email ',
-              controller: emailController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                // Check if email format is valid
+                if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                    .hasMatch(value)) {
+                  return 'Please enter a valid email';
+                }
+                return null;
+              },
+              controller: authController.emailController,
             ),
             const SizedBox(
               height: 20,
             ),
             TextInputField(
               label: 'Password',
-              controller: passwordController,
+              controller: authController.passwordController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your password';
+                }
+                if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
             InputButton(
               onPressed: () {
                 authController.register(
-                  emailController.text,
-                  passwordController.text,
+                  authController.emailController.text,
+                  authController.passwordController.text,
                 );
               },
               label: 'Sign Up',

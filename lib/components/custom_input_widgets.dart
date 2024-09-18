@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 
 class TextInputField extends StatefulWidget {
@@ -117,7 +116,7 @@ class _TextInputState extends State<TextInputField> {
               maxLines: widget.maxLines,
               keyboardType: widget.textInputType,
               style: widget.textStyle ??
-                  Get.textTheme.bodyMedium!.copyWith(color: Colors.black87),
+                  Get.textTheme.bodyMedium,
               decoration: InputDecoration(
                 filled: true,
                 prefix: widget.prefix,

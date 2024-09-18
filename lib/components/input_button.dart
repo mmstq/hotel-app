@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class InputButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -65,60 +64,6 @@ class InputButton extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: labelColor,
                 fontWeight: fontWeight,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-class CustomIconButton extends StatelessWidget {
-  final String title;
-  final Widget icon;
-  final Function onTap;
-
-  const CustomIconButton({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 22, 24, 24),
-      decoration:  BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade500)),
-      ),
-      child: ElevatedButton(
-        onPressed: () => onTap(),
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size(327, 48),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          overlayColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          backgroundColor: Colors.blue,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            icon,
-            const SizedBox(width: 6),
-            Text(
-              title,
-              style: Get.theme.textTheme.bodyLarge!.copyWith(
-                color: Colors.white,
-                height: 3.0,
-                letterSpacing: 0,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ],

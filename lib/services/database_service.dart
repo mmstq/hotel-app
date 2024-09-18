@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:hotel_app/models/booking.dart';
 import 'package:hotel_app/models/room.dart';
 
 class DatabaseService {
@@ -10,7 +13,6 @@ class DatabaseService {
         type: 'Deluxe',
         price: 80,
         isAvailable: true,
-        imageUrl: 'assets/hotel_room_1.jpg',
         amenities: '2 RestRoom, 2 King size bed, Well maintained,'
             'Window city view , fully furnished',
       ),
@@ -19,7 +21,6 @@ class DatabaseService {
         type: 'Standard',
         price: 30,
         isAvailable: true,
-        imageUrl: 'assets/hotel_room_2.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -27,7 +28,6 @@ class DatabaseService {
         type: 'Suite',
         price: 50,
         isAvailable: false,
-        imageUrl: 'assets/hotel_room_3.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -35,7 +35,6 @@ class DatabaseService {
         type: 'Standard',
         price: 5,
         isAvailable: true,
-        imageUrl: 'assets/hotel_room_4.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -43,7 +42,6 @@ class DatabaseService {
         type: 'Deluxe',
         price: 10,
         isAvailable: true,
-        imageUrl: 'assets/hotel_room_5.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -51,7 +49,6 @@ class DatabaseService {
         type: 'Deluxe',
         price: 20,
         isAvailable: true,
-        imageUrl: 'assets/hotel_room_6.jpg',
         amenities: '2 RestRoom, 2 King size bed, Well maintained'
             ',Window city view , fully furnished',
       ),
@@ -60,7 +57,6 @@ class DatabaseService {
         type: 'Suite',
         price: 200,
         isAvailable: false,
-        imageUrl: 'assets/hotel_room_7.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -68,7 +64,6 @@ class DatabaseService {
         type: 'Standard',
         price: 50,
         isAvailable: true,
-        imageUrl: 'assets/room_1.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -76,7 +71,6 @@ class DatabaseService {
         type: 'Suit',
         price: 100,
         isAvailable: true,
-        imageUrl: 'assets/room_2.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -84,7 +78,6 @@ class DatabaseService {
         type: 'Standard',
         price: 80,
         isAvailable: true,
-        imageUrl: 'assets/room_3.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -92,8 +85,7 @@ class DatabaseService {
         type: 'Deluxe',
         price: 200,
         isAvailable: false,
-        imageUrl: 'assets/room_4.jpg',
-        amenities:'2 RestRoom, 2 King size bed, '
+        amenities: '2 RestRoom, 2 King size bed, '
             'Well maintained,Window city view , fully furnished',
       ),
       Room(
@@ -101,7 +93,6 @@ class DatabaseService {
         type: 'Suit',
         price: 50,
         isAvailable: true,
-        imageUrl: 'assets/room_5.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -109,7 +100,6 @@ class DatabaseService {
         type: 'Standard',
         price: 100,
         isAvailable: true,
-        imageUrl: 'assets/room_6.jpg',
         amenities: '1 RestRoom,Double bed',
       ),
       Room(
@@ -117,7 +107,6 @@ class DatabaseService {
         type: 'Standard',
         price: 30,
         isAvailable: true,
-        imageUrl: 'assets/room_7.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -125,7 +114,6 @@ class DatabaseService {
         type: 'Suite',
         price: 50,
         isAvailable: false,
-        imageUrl: 'assets/room_8.jpg',
         amenities: '1 RestRoom,King size bed',
       ),
       Room(
@@ -133,7 +121,6 @@ class DatabaseService {
         type: 'Deluxe',
         price: 20,
         isAvailable: true,
-        imageUrl: 'assets/room_9.jpg',
         amenities: '1 RestRoom,Single bed',
       ),
       Room(
@@ -141,11 +128,41 @@ class DatabaseService {
         type: 'Suit',
         price: 20,
         isAvailable: true,
-        imageUrl: 'assets/room_10.jpg',
         amenities: '1 RestRoom,Single bed',
       ),
     ];
   }
 
   getBookings() {}
+}
+
+class BookingService {
+  // Simulate fetching booking data for the current user
+  Future<List<Booking>> getUserBookings() async {
+    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
+
+    // Example list of bookings (you can replace this with an API call)
+    return [
+      Booking(
+        id: '1',
+        room: Room(
+          type: 'Deluxe',
+          amenities: '',
+        ),
+        checkInDate: DateTime(2023, 8, 1),
+        checkOutDate: DateTime(2023, 8, 5),
+        status: 'completed',
+      ),
+      Booking(
+        id: '2',
+        room: Room(
+          type: 'Deluxe',
+          amenities: '',
+        ),
+        checkInDate: DateTime(2024, 3, 15),
+        checkOutDate: DateTime(2024, 3, 20),
+        status: 'upcoming',
+      ),
+    ];
+  }
 }

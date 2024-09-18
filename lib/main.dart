@@ -8,7 +8,6 @@ import 'screens/login_screen.dart';
 import 'screens/room_list_screen.dart';
 import 'screens/booking_screen.dart';
 import 'screens/booking_history_screen.dart';
-import 'screens/guest_management_screen.dart';
 import 'screens/account_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      initialRoute: '/dashboard',
+      initialRoute: '/login',
       getPages: [
         GetPage(name: '/login', page: () => LoginScreen()),
         GetPage(name: '/signUP', page: () => SignUpScreen()),
@@ -42,7 +41,6 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/book-room', page: () => BookingScreen(room: Get.arguments)),
         GetPage(name: '/booking-history', page: () => BookingHistoryScreen()),
-        GetPage(name: '/guest-management', page: () => GuestManagementScreen()),
         GetPage(name: '/account', page: () => AccountScreen()),
       ],
     );
