@@ -1,138 +1,36 @@
+import 'package:flutter/material.dart';
 import 'package:hotel_app/models/booking.dart';
 import 'package:hotel_app/models/room.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
-  Future<List<Room>> getRooms() async {
-    // Simulate a delay and return dummy rooms
-    await Future.delayed(const Duration(seconds: 1));
-    return [
-      // Room(
-      //   number: 101,
-      //   type: 'Deluxe',
-      //   price: 80,
-      //   isAvailable: true,
-      //   amenities: '2 RestRoom, 2 King size bed, Well maintained,'
-      //       'Window city view , fully furnished',
-      // ),
-      // Room(
-      //   number: 102,
-      //   type: 'Standard',
-      //   price: 30,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 103,
-      //   type: 'Suite',
-      //   price: 50,
-      //   isAvailable: false,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 104,
-      //   type: 'Standard',
-      //   price: 5,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 105,
-      //   type: 'Deluxe',
-      //   price: 10,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 106,
-      //   type: 'Deluxe',
-      //   price: 20,
-      //   isAvailable: true,
-      //   amenities: '2 RestRoom, 2 King size bed, Well maintained'
-      //       ',Window city view , fully furnished',
-      // ),
-      // Room(
-      //   number: 107,
-      //   type: 'Suite',
-      //   price: 200,
-      //   isAvailable: false,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 108,
-      //   type: 'Standard',
-      //   price: 50,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 109,
-      //   type: 'Suit',
-      //   price: 100,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 110,
-      //   type: 'Standard',
-      //   price: 80,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 111,
-      //   type: 'Deluxe',
-      //   price: 200,
-      //   isAvailable: false,
-      //   amenities: '2 RestRoom, 2 King size bed, '
-      //       'Well maintained,Window city view , fully furnished',
-      // ),
-      // Room(
-      //   number: 112,
-      //   type: 'Suit',
-      //   price: 50,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 113,
-      //   type: 'Standard',
-      //   price: 100,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,Double bed',
-      // ),
-      // Room(
-      //   number: 114,
-      //   type: 'Standard',
-      //   price: 30,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 115,
-      //   type: 'Suite',
-      //   price: 50,
-      //   isAvailable: false,
-      //   amenities: '1 RestRoom,King size bed',
-      // ),
-      // Room(
-      //   number: 116,
-      //   type: 'Deluxe',
-      //   price: 20,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,Single bed',
-      // ),
-      // Room(
-      //   number: 117,
-      //   type: 'Suit',
-      //   price: 20,
-      //   isAvailable: true,
-      //   amenities: '1 RestRoom,Single bed',
-      // ),
-    ];
-  }
+  final CollectionReference roomsCollection =
+  FirebaseFirestore.instance.collection('rooms');  // Firestore reference to "rooms" collection
 
-  getBookings() {}
+  // Fetch rooms from Firestore
+  Future<List<Room>> getRooms() async {
+    try {
+      QuerySnapshot snapshot = await roomsCollection.get();
+      return snapshot.docs.map((doc) {
+        // Convert Firestore document to Room object
+        return Room(
+          id: doc['id'] ?? '',
+          number: doc['number'] ?? 0,
+          type: doc['type'] ?? 'Unknown',
+          price: doc['price']?.toDouble() ?? 0.0,
+          checkinTime: TimeOfDay(hour: doc['checkinHour'], minute: doc['checkinMinute']),
+          checkoutTime: TimeOfDay(hour: doc['checkoutHour'], minute: doc['checkoutMinute']),
+          isBooked: doc['isBooked'] ?? false,
+          amenities: doc['amenities'] ?? 'No amenities listed',
+        );
+      }).toList();
+    } catch (e) {
+      print('Error getting rooms from Firestore: $e');
+      return [];  // Return an empty list in case of an error
+    }
+  }
 }
+
 
 class BookingService {
   // Simulate fetching booking data for the current user
@@ -144,6 +42,12 @@ class BookingService {
       Booking(
         id: '1',
         room: Room(
+          number: 1,
+          price: 50,
+          isBooked: true,
+          id: 'R3',
+          checkinTime: TimeOfDay.now(),
+          checkoutTime: TimeOfDay.now(),
           type: 'Deluxe',
           amenities: '',
         ),
@@ -154,6 +58,12 @@ class BookingService {
       Booking(
         id: '2',
         room: Room(
+          price: 60,
+          number: 2,
+          isBooked: true,
+          id: 'R3',
+          checkinTime: TimeOfDay.now(),
+          checkoutTime: TimeOfDay.now(),
           type: 'Deluxe',
           amenities: '',
         ),

@@ -15,7 +15,7 @@ class BookingController extends GetxController {
   void fetchBookings() async {
     isLoading(true);
     try {
-      var bookingList = await DatabaseService().getBookings();
+      var bookingList = await BookingService().getUserBookings();
       if (bookingList != null) {
         bookings.value = bookingList;
       }

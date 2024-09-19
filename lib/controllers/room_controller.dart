@@ -26,13 +26,13 @@ class RoomController extends GetxController {
   }
 
   void bookRoom(Room room) {
-    room.isAvailable = false;
+    room.isBooked = false;
     rooms.refresh();
     Get.snackbar('Success', 'Room booked successfully');
   }
 
   void filterRoomsByAvailability() {
-    var availableRooms = rooms.where((room) => room.isAvailable).toList();
+    var availableRooms = rooms.where((room) => room.isBooked).toList();
     rooms.value = availableRooms;
   }
   // Filter rooms by a specific type
