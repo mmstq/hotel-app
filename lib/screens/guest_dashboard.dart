@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_app/components/input_button.dart';
-import 'package:hotel_app/screens/account_screen.dart';
+import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/screens/account.dart';
 import '../controllers/room_controller.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -82,10 +82,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: Obx(() {
               if (roomController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CupertinoActivityIndicator(
+                    radius: 20,
+                  ),
+                );
               }
               if (roomController.filteredRooms.isEmpty) {
-                return const Center(child: Text('No rooms found'));
+                return Container(
+                    child: const Center(child: Text('No rooms found')));
               }
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -177,7 +182,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Filter and Sort Rooms'),
-          content: SingleChildScrollView( // Using SingleChildScrollView to handle potential overflow
+          content: SingleChildScrollView(
+            // Using SingleChildScrollView to handle potential overflow
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

@@ -1,13 +1,45 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../services/auth_service.dart';
 
 class AuthController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  var isAuthenticated = false.obs;
-  final AuthService _authService = AuthService();
+  RxBool showPassword = false.obs;
+
+
+  // Clear text fields whenever the controller is initialized or when needed
+  @override
+  void onInit() {
+    super.onInit();
+    clearFields();
+  }
+
+  // Clear text fields whenever this is called
+  void clearFields() {
+    emailController.clear();
+    passwordController.clear();
+  }
+
+  // Show loading dialog
+  void showLoadingDialog() {
+    Get.dialog(
+      const Center(
+        child: CupertinoActivityIndicator(
+          radius: 20,
+        ),
+      ),
+      barrierDismissible: false, // Prevent the user from closing the dialog
+    );
+  }
+
+  // Hide loading dialog
+  void hideLoadingDialog() {
+    if (Get.isDialogOpen!) {
+      Get.back();  // Close the dialog
+    }
+  }
 
   // Function to handle login and Firebase Authentication
   Future<void> loginUser(String email, String password) async {
@@ -21,6 +53,10 @@ class AuthController extends GetxController {
       );
       return;
     }
+
+    // Show progress indicator while authenticating
+    showLoadingDialog();
+
     try {
       // Attempt to sign in with email and password
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -28,8 +64,12 @@ class AuthController extends GetxController {
         password: password,
       );
       // If successful, navigate to the dashboard screen
-      Get.offAllNamed('/dashboard');
+      hideLoadingDialog();// Hide the loading dialog
+      Get.offAllNamed(
+          '/guestDashboard'); // Navigate to guestDashboard after successful login
+
     } on FirebaseAuthException catch (e) {
+      hideLoadingDialog(); // Hide the loading dialog on error
       // Handle Firebase specific errors
       if (e.code == 'user-not-found') {
         Get.snackbar(
@@ -65,6 +105,7 @@ class AuthController extends GetxController {
         );
       }
     } catch (e) {
+      hideLoadingDialog();
       // Handle general errors
       Get.snackbar(
         'Error',
@@ -88,20 +129,25 @@ class AuthController extends GetxController {
       );
       return;
     }
+
+    showLoadingDialog();  // Show progress indicator while registering
     try {
       // Register user using Firebase Authentication
-      User? user = await _authService.registerWithEmail(email, password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       // Check if registration was successful
-      if (user != null) {
-        isAuthenticated.value = true;
-        Get.offAllNamed('/dashboard');  // Navigate to dashboard after successful registration
-      }
+      hideLoadingDialog();  // Hide the loading dialog on success
+      Get.offAllNamed(
+          '/guestDashboard'); // Navigate to guestDashboard after successful registration
     } on FirebaseAuthException catch (e) {
+      hideLoadingDialog();  // Hide the loading dialog on error
       // Handle FirebaseAuth errors
       if (e.code == 'email-already-in-use') {
         Get.snackbar(
-          'Registration Error',
+          'Error',
           'The email address is already in use by another account.',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red.shade400,
@@ -109,7 +155,7 @@ class AuthController extends GetxController {
         );
       } else if (e.code == 'invalid-email') {
         Get.snackbar(
-          'Registration Error',
+          'Error',
           'The email address is not valid.',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red.shade400,
@@ -117,7 +163,7 @@ class AuthController extends GetxController {
         );
       } else if (e.code == 'weak-password') {
         Get.snackbar(
-          'Registration Error',
+          'Error',
           'The password is too weak. Please choose a stronger password.',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red.shade400,
@@ -125,7 +171,7 @@ class AuthController extends GetxController {
         );
       } else {
         Get.snackbar(
-          'Registration Error',
+          'Error',
           'Registration failed: ${e.message}',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red.shade400,
@@ -133,6 +179,7 @@ class AuthController extends GetxController {
         );
       }
     } catch (e) {
+      hideLoadingDialog();
       // Handle general errors
       Get.snackbar(
         'Error',
@@ -147,15 +194,17 @@ class AuthController extends GetxController {
 
   // Function to log out the user
   void logout() async {
+    showLoadingDialog();  // Show progress indicator while logout
     try {
       await FirebaseAuth.instance.signOut(); // Sign out from Firebase
+      hideLoadingDialog();  // Hide the loading dialog on success
       Get.offAllNamed(
           '/login'); // Navigate back to the login screen and clear navigation stack
     } catch (e) {
       Get.snackbar(
-        'Logout Error',
+        'Error',
         'Failed to log out. Please try again.',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red.shade400,
         colorText: Colors.white,
       );
