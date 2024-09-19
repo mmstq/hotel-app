@@ -57,7 +57,7 @@ class SignInScreen extends StatelessWidget {
               TextInputField(
                 label: 'Email',
                 controller: authController.emailController,
-                prefixIcon: const Icon(CupertinoIcons.mail_solid),
+                prefixIcon: const Icon(Icons.alternate_email_outlined),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';

@@ -18,7 +18,7 @@ class BookingScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Book Room ${room.number}'),
+        title: Text('Book Room ${room.roomNo}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,7 +46,7 @@ class BookingScreen extends StatelessWidget {
                               ?.withOpacity(0.7)),
                     ),
                     Text(
-                      room.type,
+                      room.roomType!,
                       style: Get.theme.textTheme.headlineLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,

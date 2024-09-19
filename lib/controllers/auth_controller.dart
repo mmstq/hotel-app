@@ -17,13 +17,11 @@ class AuthController extends GetxController {
     super.onInit();
     clearFields();
   }
-
   // Clear text fields whenever this is called
   void clearFields() {
     emailController.clear();
     passwordController.clear();
   }
-
   // Show loading dialog
   void showLoadingDialog() {
     Get.dialog(
@@ -35,14 +33,12 @@ class AuthController extends GetxController {
       barrierDismissible: false, // Prevent the user from closing the dialog
     );
   }
-
   // Hide loading dialog
   void hideLoadingDialog() {
     if (Get.isDialogOpen!) {
       Get.back();  // Close the dialog
     }
   }
-
   // Function to handle login and Firebase Authentication
   Future<void> loginUser(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
@@ -118,11 +114,8 @@ class AuthController extends GetxController {
       );
     }
   }
-
   // Method for registration
   Future<void> register(String email, String password, bool isGuest) async {
-
-
     showLoadingDialog();  // Show progress indicator while registering
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(

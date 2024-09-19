@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import '../models/booking.dart';
-import '../services/database_service.dart';
 
 class BookingController extends GetxController {
   var bookings = <Booking>[].obs;
@@ -13,15 +12,7 @@ class BookingController extends GetxController {
   }
 
   void fetchBookings() async {
-    isLoading(true);
-    try {
-      var bookingList = await BookingService().getUserBookings();
-      if (bookingList != null) {
-        bookings.value = bookingList;
-      }
-    } finally {
-      isLoading(false);
-    }
+
   }
 
   void createBooking(Booking booking) {

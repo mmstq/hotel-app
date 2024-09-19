@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app_binding.dart';
+import 'package:hotel_app/bindings/dashboard_binding.dart';
 import 'package:hotel_app/firebase_options.dart';
 import 'package:hotel_app/middleware/middle_ware.dart';
 import 'package:hotel_app/screens/guest_dashboard.dart';
@@ -31,15 +33,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
+      initialBinding: AppBinding(),
       themeMode: ThemeMode.system,
       initialRoute: '/guestDashboard',
       getPages: [
         GetPage(name: '/login', page: () => SignInScreen()),
-        GetPage(name: '/signUP', page: () => SignUpScreen()),
+        GetPage(name: '/signUP', page: () => const SignUpScreen()),
         // GetPage(name: '/rooms', page: () => RoomListScreen()),
         GetPage(
           name: '/guestDashboard',
-          page: () => DashboardScreen(),
+          page: () => const DashboardScreen(),
+          binding: DashboardBinding(),
           middlewares: [
             AuthMiddleware(),
           ],

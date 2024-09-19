@@ -1,38 +1,45 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class Room {
-  final String id;
-  final double number;
-  final String type;
-  final double price;
-  final String amenities;
-  final TimeOfDay checkinTime;
-  final TimeOfDay checkoutTime;
-  late final bool isBooked;
+  int? roomNo;
+  String? roomType;
+  String? id;
+  double? price;
+  bool? isBooked;
+  List<String>? amenities;
+  int? checkinTime;
+  int? checkoutTime;
 
-  Room({
-    required this.id,
-    required this.number,
-    required this.type,
-    required this.price,
-    required this.amenities,
-    required this.checkinTime,
-    required this.checkoutTime,
-    required this.isBooked,
-  });
+  Room(
+      {this.roomNo,
+        this.roomType,
+        this.id,
+        this.price,
+        this.isBooked,
+        this.amenities,
+        this.checkinTime,
+        this.checkoutTime});
 
-  factory Room.fromFirestore(DocumentSnapshot doc) {
-    var data = doc.data() as Map<String, dynamic>;
-    return Room(
-      id: doc.id,
-      number: data['roomNo'],
-      type: data['type'],
-      price: data['price']?.toDouble() ?? 0.0,
-      amenities: data['amenities'],
-      checkinTime: data['checkinTime'],
-      checkoutTime: data['checkoutTime'],
-      isBooked: data['isBooked'] ?? false,
-    );
+  Room.fromJson(Map<String, dynamic> json) {
+    roomNo = json['roomNo'];
+    roomType = json['roomType'];
+    id = json['id'];
+    price = json['price'];
+    isBooked = json['isBooked'];
+    amenities = json['amenities'].cast<String>();
+    checkinTime = json['checkinTime'];
+    checkoutTime = json['checkoutTime'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['roomNo'] = roomNo;
+    data['roomType'] = roomType;
+    data['id'] = id;
+    data['price'] = price;
+    data['isBooked'] = isBooked;
+    data['amenities'] = amenities;
+    data['checkinTime'] = checkinTime;
+    data['checkoutTime'] = checkoutTime;
+    return data;
   }
 }

@@ -2,26 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/screens/account.dart';
 import '../controllers/room_controller.dart';
 
-class DashboardScreen extends StatefulWidget {
-  @override
-  _DashboardScreenState createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  final RoomController roomController = Get.put(RoomController());
-  int _selectedIndex = 0;
+class DashboardScreen extends GetView<RoomController> {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(()=>Scaffold(
       appBar: AppBar(
-        title: _selectedIndex == 0
+        title: controller.selectedIndex.value == 0
             ? const Text('Find Your Room')
             : const Text('Account'),
-        actions: _selectedIndex == 0
+        actions: controller.selectedIndex.value == 0
             ? [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -32,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ]
             : [],
       ),
-      body: _selectedIndex == 0 ? _buildRoomList() : AccountScreen(),
+      body: controller.selectedIndex.value == 0 ? _buildRoomList() : AccountScreen(),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           splashFactory: NoSplash.splashFactory, // Disable ripple effect
@@ -49,21 +44,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           child: BottomNavigationBar(
             showUnselectedLabels: false,
-            currentIndex: _selectedIndex,
+            currentIndex: controller.selectedIndex.value,
             onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
+              controller.selectedIndex.value = index;
             },
             items: [
               BottomNavigationBarItem(
-                icon: _selectedIndex == 0
+                icon: controller.selectedIndex.value == 0
                     ? const Icon(CupertinoIcons.bed_double_fill)
                     : const Icon(CupertinoIcons.bed_double),
                 label: 'Rooms',
               ),
               BottomNavigationBarItem(
-                icon: _selectedIndex == 1
+                icon: controller.selectedIndex.value == 1
                     ? const Icon(CupertinoIcons.person_alt_circle_fill)
                     : const Icon(CupertinoIcons.person_alt_circle),
                 label: 'Account',
@@ -72,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildRoomList() {
@@ -82,14 +75,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Expanded(
             child: Obx(() {
-              if (roomController.isLoading.value) {
+              if (controller.isLoading.value) {
                 return const Center(
                   child: CupertinoActivityIndicator(
                     radius: 20,
                   ),
                 );
               }
-              if (roomController.filteredRooms.isEmpty) {
+              if (controller.rooms.isEmpty) {
                 return const Center(child: Text('No rooms found'));
               }
               return GridView.builder(
@@ -97,9 +90,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisCount: 2,
                   childAspectRatio: 0.9,
                 ),
-                itemCount: roomController.filteredRooms.length,
+                itemCount: controller.rooms.length,
                 itemBuilder: (context, index) {
-                  var room = roomController.filteredRooms[index];
+                  var room = controller.rooms[index];
                   return _buildRoomCard(room);
                 },
               );
@@ -110,9 +103,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildRoomCard(room) {
+  Widget _buildRoomCard(Room room) {
     return Container(
-      height: MediaQuery.sizeOf(context).height * 0.2,
+      height: Get.height*0.2,
       decoration: BoxDecoration(
         color: Get.theme.cardColor,
         borderRadius: BorderRadius.circular(14),
@@ -131,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Align(
             child: SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.1,
+              height: Get.height * 0.1,
               child:Image.asset(
                 'assets/room_icon.png',
                 fit: BoxFit.cover,
@@ -141,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Text(
-              '${room.type}',
+              '${room.roomType}',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
@@ -165,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               label: 'Book Now',
               height: 40,
               onPressed: () {
-                Navigator.pushNamed(context, '/book-room', arguments: room);
+                // Navigator.pushNamed(context, '/book-room', arguments: room);
               },
             ),
           ),
@@ -175,7 +168,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showFilterDialog(BuildContext context) {
-    showDialog(
+/*    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -191,15 +184,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ListTile(
                       title: const Text('All Rooms'),
                       onTap: () {
-                        roomController.filterRoomsByType('All');
+                        // roomController.filterRoomsByType('All');
                         Get.back();
                       },
-                      selected: roomController.selectedFilter.value == 'All',
+                      selected: controller.selectedFilter.value == 'All',
                     ),
                     ListTile(
                       title: const Text('Deluxe'),
                       onTap: () {
-                        roomController.filterRoomsByType('Deluxe');
+                        controller.filterRoomsByType('Deluxe');
                         Get.back();
                       },
                     ),
@@ -244,6 +237,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         );
       },
-    );
+    );*/
   }
 }
