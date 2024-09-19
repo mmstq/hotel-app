@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import '../controllers/booking_controller.dart';
 import '../models/booking.dart';
 
-class BookingHistoryScreen extends StatelessWidget {
-  final BookingController bookingController = Get.put(BookingController());
+class BookingHistoryScreen extends GetView<BookingController> {
+  const BookingHistoryScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +14,18 @@ class BookingHistoryScreen extends StatelessWidget {
         title: const Text('Booking History'),
       ),
       body: Obx(() {
-        if (bookingController.isLoading.value) {
+        if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (bookingController.bookings.isEmpty) {
+        if (controller.bookings.isEmpty) {
           return const Center(child: Text('No bookings found'));
         }
 
         return ListView.builder(
-          itemCount: bookingController.bookings.length,
+          itemCount: controller.bookings.length,
           itemBuilder: (context, index) {
-            var booking = bookingController.bookings[index];
+            var booking = controller.bookings[index];
             return _buildBookingCard(booking);
           },
         );

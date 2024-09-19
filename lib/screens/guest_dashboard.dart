@@ -11,61 +11,63 @@ class DashboardScreen extends GetView<RoomController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=>Scaffold(
-      appBar: AppBar(
-        title: controller.selectedIndex.value == 0
-            ? const Text('Find Your Room')
-            : const Text('Account'),
-        actions: controller.selectedIndex.value == 0
-            ? [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              _showFilterDialog(context);
-            },
+    return Obx(() => Scaffold(
+          appBar: AppBar(
+            title: controller.selectedIndex.value == 0
+                ? const Text('Find Your Room')
+                : const Text('Account'),
+            actions: controller.selectedIndex.value == 0
+                ? [
+                    IconButton(
+                      icon: const Icon(Icons.filter_list),
+                      onPressed: () {
+                        _showFilterDialog(context);
+                      },
+                    ),
+                  ]
+                : [],
           ),
-        ]
-            : [],
-      ),
-      body: controller.selectedIndex.value == 0 ? _buildRoomList() : AccountScreen(),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashFactory: NoSplash.splashFactory, // Disable ripple effect
-          highlightColor: Colors.transparent, // Remove highlight on tap
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                width: 1,
-                color: Get.theme.dividerColor.withOpacity(0.5),
+          body: controller.selectedIndex.value == 0
+              ? _buildRoomList()
+              : AccountScreen(),
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+              splashFactory: NoSplash.splashFactory, // Disable ripple effect
+              highlightColor: Colors.transparent, // Remove highlight on tap
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    width: 1,
+                    color: Get.theme.dividerColor.withOpacity(0.5),
+                  ),
+                ),
+              ),
+              child: BottomNavigationBar(
+                showUnselectedLabels: false,
+                currentIndex: controller.selectedIndex.value,
+                onTap: (index) {
+                  controller.selectedIndex.value = index;
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: controller.selectedIndex.value == 0
+                        ? const Icon(Icons.bed)
+                        : const Icon(Icons.bed_outlined),
+                    label: 'Rooms',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: controller.selectedIndex.value == 1
+                        ? const Icon(Icons.person_2)
+                        : const Icon(Icons.person_2_outlined),
+                    label: 'Account',
+                  ),
+                ],
               ),
             ),
           ),
-          child: BottomNavigationBar(
-            showUnselectedLabels: false,
-            currentIndex: controller.selectedIndex.value,
-            onTap: (index) {
-              controller.selectedIndex.value = index;
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: controller.selectedIndex.value == 0
-                    ? const Icon(CupertinoIcons.bed_double_fill)
-                    : const Icon(CupertinoIcons.bed_double),
-                label: 'Rooms',
-              ),
-              BottomNavigationBarItem(
-                icon: controller.selectedIndex.value == 1
-                    ? const Icon(CupertinoIcons.person_alt_circle_fill)
-                    : const Icon(CupertinoIcons.person_alt_circle),
-                label: 'Account',
-              ),
-            ],
-          ),
-        ),
-      ),
-    ));
+        ));
   }
 
   Widget _buildRoomList() {
@@ -105,7 +107,7 @@ class DashboardScreen extends GetView<RoomController> {
 
   Widget _buildRoomCard(Room room) {
     return Container(
-      height: Get.height*0.2,
+      height: Get.height * 0.2,
       decoration: BoxDecoration(
         color: Get.theme.cardColor,
         borderRadius: BorderRadius.circular(14),
@@ -125,9 +127,10 @@ class DashboardScreen extends GetView<RoomController> {
           Align(
             child: SizedBox(
               height: Get.height * 0.1,
-              child:Image.asset(
+              child: Image.asset(
                 'assets/room_icon.png',
                 fit: BoxFit.cover,
+                color: Get.theme.dividerColor,
               ),
             ),
           ),
@@ -148,17 +151,24 @@ class DashboardScreen extends GetView<RoomController> {
               '${room.amenities}',
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
+                color:
+                    Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: InputButton(
-              label: 'Book Now',
+              label: Text(
+                'Book Now',
+                style: Get.theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
               height: 40,
               onPressed: () {
-                // Navigator.pushNamed(context, '/book-room', arguments: room);
+                Get.toNamed('/book-room', arguments: room);
               },
             ),
           ),
@@ -168,7 +178,7 @@ class DashboardScreen extends GetView<RoomController> {
   }
 
   void _showFilterDialog(BuildContext context) {
-/*    showDialog(
+    showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -184,10 +194,9 @@ class DashboardScreen extends GetView<RoomController> {
                     ListTile(
                       title: const Text('All Rooms'),
                       onTap: () {
-                        // roomController.filterRoomsByType('All');
+                        controller.filterRoomsByType('All');
                         Get.back();
                       },
-                      selected: controller.selectedFilter.value == 'All',
                     ),
                     ListTile(
                       title: const Text('Deluxe'),
@@ -199,14 +208,14 @@ class DashboardScreen extends GetView<RoomController> {
                     ListTile(
                       title: const Text('Suite'),
                       onTap: () {
-                        roomController.filterRoomsByType('Suite');
+                        controller.filterRoomsByType('Suite');
                         Get.back();
                       },
                     ),
                     ListTile(
                       title: const Text('Standard'),
                       onTap: () {
-                        roomController.filterRoomsByType('Standard');
+                        controller.filterRoomsByType('Standard');
                         Get.back();
                       },
                     ),
@@ -219,14 +228,14 @@ class DashboardScreen extends GetView<RoomController> {
                     ListTile(
                       title: const Text('Low to High'),
                       onTap: () {
-                        roomController.sortRoomsByPrice('LowToHigh');
+                        controller.sortRoomsByPrice(descending: false);
                         Get.back();
                       },
                     ),
                     ListTile(
                       title: const Text('High to Low'),
                       onTap: () {
-                        roomController.sortRoomsByPrice('HighToLow');
+                        controller.sortRoomsByPrice(descending: true);
                         Get.back();
                       },
                     ),
@@ -237,6 +246,6 @@ class DashboardScreen extends GetView<RoomController> {
           ),
         );
       },
-    );*/
+    );
   }
 }

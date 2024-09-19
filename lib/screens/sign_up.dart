@@ -6,7 +6,6 @@ import 'package:hotel_app/components/button.dart';
 import '../controllers/auth_controller.dart';
 
 class SignUpScreen extends StatefulWidget {
-
   const SignUpScreen({super.key});
 
   @override
@@ -19,6 +18,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String userType = 'Guest';
+
   @override
   Widget build(BuildContext context) {
     authController.clearFields();
@@ -70,39 +70,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Container(
                 width: double.infinity,
                 height: 40,
-                decoration: BoxDecoration(color: CupertinoColors.inactiveGray.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
-                margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                decoration: BoxDecoration(
+                    color: CupertinoColors.inactiveGray.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12)),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 child: Row(
                   children: ['Staff', 'Guest']
                       .map((e) => Expanded(
-                    child: InkWell(borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        setState(() {
-                          userType = e;
-                        });
-                      },
-                      child: AnimatedContainer(
-                        curve: Curves.ease,
-                        duration: const Duration(milliseconds:300),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: userType == e
-                                ? Colors.blue
-                                : Colors.transparent),
-                        child: Text(
-                          e,
-                          style: Get.textTheme.titleSmall!.copyWith(
-                              fontWeight: userType == e
-                                  ? FontWeight.w700
-                                  : FontWeight.w400,
-                              color: userType == e
-                                  ? Colors.white
-                                  : Colors.black87),
-                        ),
-                      ),
-                    ),
-                  ))
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              onTap: () {
+                                setState(() {
+                                  userType = e;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                curve: Curves.ease,
+                                duration: const Duration(milliseconds: 300),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: userType == e
+                                        ? Colors.blue
+                                        : Colors.transparent),
+                                child: Text(
+                                  e,
+                                  style: Get.textTheme.titleSmall!.copyWith(
+                                      fontWeight: userType == e
+                                          ? FontWeight.w700
+                                          : FontWeight.w400,
+                                      color: userType == e
+                                          ? Colors.white
+                                          : Colors.black87),
+                                ),
+                              ),
+                            ),
+                          ))
                       .toList(),
                 ),
               ),
@@ -116,7 +120,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
                   }
-                  // Check if email format is valid
                   if (!RegExp(
                           r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                       .hasMatch(value)) {
@@ -126,17 +129,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
-              // Password Input Field
               Obx(
                 () => TextInputField(
                   obscureText: !authController.showPassword.value,
                   label: 'Password',
-                  prefixIcon: const Icon(CupertinoIcons.lock_fill),
+                  prefixIcon: const Icon(Icons.key_outlined),
                   controller: authController.passwordController,
                   suffixIcon: IconButton(
                     highlightColor: Colors.transparent,
-                    splashRadius:null,
+                    splashRadius: null,
                     splashColor: Colors.transparent,
                     padding: const EdgeInsets.all(0),
                     icon: authController.showPassword.value
@@ -165,20 +166,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Sign Up Button
               InputButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (_formKey.currentState!.validate() &&
+                      !authController.isLoading.value) {
                     authController.register(
-
                       authController.emailController.text.trim(),
                       authController.passwordController.text.trim(),
                       userType == 'Guest'
                     );
                   }
                 },
-                label: 'Sign Up',
+                label: Obx(
+                  () => authController.isLoading.value
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CupertinoActivityIndicator(
+                            color: Colors.white,
+                            radius: 15,
+                          ),
+                        )
+                      : const Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
               ),
 
               Row(
@@ -192,10 +207,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: const ButtonStyle(
                       overlayColor: WidgetStatePropertyAll(Colors.transparent),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Sign In',
                       style: TextStyle(
-                        color: Colors.blueAccent.shade700,
+                        color: Colors.blue,
                       ),
                     ),
                   ),

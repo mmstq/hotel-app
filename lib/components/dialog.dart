@@ -124,7 +124,7 @@ class CustomAlertDialogState extends State<CustomAlertDialog> {
                         height: 48,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Colors.green,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

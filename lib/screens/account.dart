@@ -79,7 +79,7 @@ Widget _buildLogoutButton() {
         margin: const EdgeInsets.fromLTRB(16, 4, 24, 4),
         alignment: Alignment.bottomLeft,
         child: Text(
-          'Log Out',
+          'Log out',
           style: Get.textTheme.bodyMedium!.copyWith(
             fontWeight: FontWeight.normal,
             fontSize: 18,

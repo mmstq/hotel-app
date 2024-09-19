@@ -1,5 +1,4 @@
 import 'package:hotel_app/models/room.dart';
-import 'package:hotel_app/models/user.dart';
 
 
 class Booking {

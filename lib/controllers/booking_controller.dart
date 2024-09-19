@@ -12,7 +12,6 @@ class BookingController extends GetxController {
   }
 
   void fetchBookings() async {
-
   }
 
   void createBooking(Booking booking) {

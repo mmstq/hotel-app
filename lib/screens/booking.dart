@@ -6,12 +6,10 @@ import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/screens/payment.dart';
 import '../controllers/booking_controller.dart';
 
-class BookingScreen extends StatelessWidget {
+class BookingScreen extends GetView<BookingController> {
   final Room room;
-  final BookingController bookingController = Get.put(BookingController());
 
-  BookingScreen({super.key, required this.room});
-
+  const BookingScreen({super.key, required this.room});
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +122,16 @@ class BookingScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16),
         child: InputButton(
-          label: 'Book Now',
+          label: Text(
+            'Book Now',
+            style: Get.theme.textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute( builder: (context) => PaymentScreen()));
+                MaterialPageRoute(builder: (context) => PaymentScreen()));
             // User user = User(
             //     id: '1',
             //     name: 'John Doe',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class InputButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final String label;
+  final Widget label;
   final Color labelColor;
   final bool isLoading;
   final Color? backgroundColor;
@@ -59,13 +59,7 @@ class InputButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (icon != null) ...[icon!, const SizedBox(width: 8)],
-            Text(
-              label,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: labelColor,
-                fontWeight: fontWeight,
-              ),
-            ),
+            label,
           ],
         ),
       ),
