@@ -5,12 +5,20 @@ import 'package:hotel_app/components/text_field.dart';
 import 'package:hotel_app/components/button.dart';
 import '../controllers/auth_controller.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final AuthController authController = Get.put(AuthController());
-  final _formKey = GlobalKey<FormState>(); // Add form key for validation
 
-  SignUpScreen({super.key});
+  final _formKey = GlobalKey<FormState>();
 
+  String userType = 'Guest';
   @override
   Widget build(BuildContext context) {
     authController.clearFields();
@@ -59,11 +67,50 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              Container(
+                width: double.infinity,
+                height: 40,
+                decoration: BoxDecoration(color: CupertinoColors.inactiveGray.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: Row(
+                  children: ['Staff', 'Guest']
+                      .map((e) => Expanded(
+                    child: InkWell(borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        setState(() {
+                          userType = e;
+                        });
+                      },
+                      child: AnimatedContainer(
+                        curve: Curves.ease,
+                        duration: const Duration(milliseconds:300),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: userType == e
+                                ? Colors.blue
+                                : Colors.transparent),
+                        child: Text(
+                          e,
+                          style: Get.textTheme.titleSmall!.copyWith(
+                              fontWeight: userType == e
+                                  ? FontWeight.w700
+                                  : FontWeight.w400,
+                              color: userType == e
+                                  ? Colors.white
+                                  : Colors.black87),
+                        ),
+                      ),
+                    ),
+                  ))
+                      .toList(),
+                ),
+              ),
 
               // Email Input Field
               TextInputField(
                 label: 'Email',
-                prefixIcon: const Icon(CupertinoIcons.mail_solid),
+                prefixIcon: const Icon(Icons.alternate_email_outlined),
                 controller: authController.emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -124,8 +171,10 @@ class SignUpScreen extends StatelessWidget {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     authController.register(
+
                       authController.emailController.text.trim(),
                       authController.passwordController.text.trim(),
+                      userType == 'Guest'
                     );
                   }
                 },

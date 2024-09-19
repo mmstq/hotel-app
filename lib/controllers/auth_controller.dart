@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   RxBool showPassword = false.obs;
 
 
@@ -118,66 +120,29 @@ class AuthController extends GetxController {
   }
 
   // Method for registration
-  Future<void> register(String email, String password) async {
-    if (email.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Email and password must not be empty',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return;
-    }
+  Future<void> register(String email, String password, bool isGuest) async {
+
 
     showLoadingDialog();  // Show progress indicator while registering
     try {
-      // Register user using Firebase Authentication
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
-      );
+      ).then((user){
+        FirebaseFirestore.instance.collection('users').add({
+          'email':email,
 
-      // Check if registration was successful
+          'isGuest': isGuest
+        });
+      });
+
       hideLoadingDialog();  // Hide the loading dialog on success
       Get.offAllNamed(
-          '/guestDashboard'); // Navigate to guestDashboard after successful registration
+          '/login'); // Navigate to guestDashboard after successful registration
     } on FirebaseAuthException catch (e) {
       hideLoadingDialog();  // Hide the loading dialog on error
       // Handle FirebaseAuth errors
-      if (e.code == 'email-already-in-use') {
-        Get.snackbar(
-          'Error',
-          'The email address is already in use by another account.',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
-        );
-      } else if (e.code == 'invalid-email') {
-        Get.snackbar(
-          'Error',
-          'The email address is not valid.',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
-        );
-      } else if (e.code == 'weak-password') {
-        Get.snackbar(
-          'Error',
-          'The password is too weak. Please choose a stronger password.',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
-        );
-      } else {
-        Get.snackbar(
-          'Error',
-          'Registration failed: ${e.message}',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
-        );
-      }
+
     } catch (e) {
       hideLoadingDialog();
       // Handle general errors
