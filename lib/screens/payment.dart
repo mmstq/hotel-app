@@ -1,10 +1,10 @@
-// payment_screen.dart
+// payment.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_app/components/custom_input_widgets.dart';
-import 'package:hotel_app/components/input_button.dart';
+import 'package:hotel_app/components/text_field.dart';
+import 'package:hotel_app/components/button.dart';
 import 'package:hotel_app/controllers/payment_controller.dart';
-import 'package:hotel_app/screens/dashboard.dart';
+import 'package:hotel_app/screens/guest_dashboard.dart';
 
 class PaymentScreen extends StatelessWidget {
   @override

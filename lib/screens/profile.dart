@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/components/custom_input_widgets.dart';
+import 'package:hotel_app/components/text_field.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

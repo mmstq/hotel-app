@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_app/components/custom_input_widgets.dart';
-import 'package:hotel_app/components/input_button.dart';
+import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/components/time_picker.dart';
 import 'package:hotel_app/models/room.dart';
-import 'package:hotel_app/models/user.dart';
-import 'package:hotel_app/screens/payment_screen.dart';
+import 'package:hotel_app/screens/payment.dart';
 import '../controllers/booking_controller.dart';
-import '../models/booking.dart';
 
 class BookingScreen extends StatelessWidget {
   final Room room;
@@ -14,8 +12,6 @@ class BookingScreen extends StatelessWidget {
 
   BookingScreen({super.key, required this.room});
 
-  final _checkInDateController = TextEditingController();
-  final _checkOutDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
