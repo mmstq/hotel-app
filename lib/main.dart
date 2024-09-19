@@ -1,14 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/firebase_options.dart';
+import 'package:hotel_app/middleware/middle_ware.dart';
+import 'package:hotel_app/screens/guest_dashboard.dart';
+import 'package:hotel_app/screens/profile.dart';
 import 'package:hotel_app/screens/sign_up.dart';
-import 'screens/login_screen.dart';
+import 'screens/sign_in.dart';
 import 'screens/room_list_screen.dart';
-import 'screens/booking_screen.dart';
-import 'screens/booking_history_screen.dart';
-import 'screens/guest_management_screen.dart';
-import 'screens/settings_screen.dart';
+import 'screens/booking.dart';
+import 'screens/booking_history.dart';
+import 'screens/account.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -27,17 +28,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: 'Star Hotel',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
+      initialRoute: '/guestDashboard',
       getPages: [
-        GetPage(name: '/login', page: () => LoginScreen()),
+        GetPage(name: '/login', page: () => SignInScreen()),
         GetPage(name: '/signUP', page: () => SignUpScreen()),
-        GetPage(name: '/rooms', page: () => RoomListScreen()),
+        // GetPage(name: '/rooms', page: () => RoomListScreen()),
         GetPage(
-            name: '/book-room', page: () => BookingScreen(room: Get.arguments)),
-        GetPage(name: '/booking-history', page: () => BookingHistoryScreen()),
-        GetPage(name: '/guest-management', page: () => GuestManagementScreen()),
-        GetPage(name: '/settings', page: () => SettingsScreen()),
+          name: '/guestDashboard',
+          page: () => DashboardScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/profile',
+          page: () => ProfileScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/book-room',
+          page: () => BookingScreen(room: Get.arguments),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/booking-history',
+          page: () => BookingHistoryScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/account',
+          page: () => AccountScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
       ],
     );
   }

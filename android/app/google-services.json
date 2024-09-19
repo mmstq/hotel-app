@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "775424518417",
-    "project_id": "hotel-app-samdev",
-    "storage_bucket": "hotel-app-samdev.appspot.com"
+    "project_number": "968311852734",
+    "project_id": "hotel-app-eaed0",
+    "storage_bucket": "hotel-app-eaed0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:775424518417:android:6845bd577a5bf5906ac4b0",
+        "mobilesdk_app_id": "1:968311852734:android:229c435d38c64d1ba798ef",
         "android_client_info": {
           "package_name": "com.example.hotel_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD3aqlQeUd83q6mtt3VWTCLrL3wfNlqB7A"
+          "current_key": "AIzaSyBRi5oqbrXfKaHGoqpTHemqLgJrnreNHM4"
         }
       ],
       "services": {

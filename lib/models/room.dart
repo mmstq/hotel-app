@@ -1,13 +1,15 @@
 class Room {
-  final int number;
+  final int? number;
   final String type;
-  final double price;
-  bool isAvailable;
+  final double? price;
+  late final bool isAvailable;
+  final String? amenities;
 
   Room({
-    required this.number,
-    required this.type,
-    required this.price,
+     this.number,
+     required this.type,
+     this.price,
     this.isAvailable = true,
+    this.amenities,
   });
 }
