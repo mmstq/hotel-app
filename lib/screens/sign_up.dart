@@ -89,7 +89,7 @@ class SignUpScreen extends StatelessWidget {
                   controller: authController.passwordController,
                   suffixIcon: IconButton(
                     highlightColor: Colors.transparent,
-                    splashRadius: 0,
+                    splashRadius:null,
                     splashColor: Colors.transparent,
                     padding: const EdgeInsets.all(0),
                     icon: authController.showPassword.value

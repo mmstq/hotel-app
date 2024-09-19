@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_app/components/text_field.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -25,8 +26,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Process the form data
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully')),
+      Get.snackbar(
+        'Update',
+        'Profile updated successfully',
+        snackPosition: SnackPosition.TOP,
       );
       // Handle updating user profile (e.g., save to database)
     }

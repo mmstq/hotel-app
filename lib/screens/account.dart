@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,9 +5,6 @@ import 'package:hotel_app/components/dialog.dart';
 import 'package:hotel_app/controllers/auth_controller.dart';
 import 'package:hotel_app/screens/booking_history.dart';
 import 'package:hotel_app/screens/profile.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path_provider/path_provider.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -18,55 +14,6 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _imagePath;  // Variable to store image path
-
-  @override
-  void initState() {
-    super.initState();
-    _loadImage();  // Load the saved image when the screen is initialized
-  }
-
-  // Function to pick and save an image
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      // Save the image to local file system and then store the path
-      final File imageFile = await _saveImageLocally(pickedImage);
-      setState(() {
-        _imagePath = imageFile.path;  // Update the local state with the image path
-      });
-      _saveImagePath(imageFile.path);  // Save the image path in local storage
-    }
-  }
-
-  // Save the image path to SharedPreferences
-  Future<void> _saveImagePath(String path) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('profile_image', path);  // Save image path in local storage
-  }
-
-  // Load the image path from SharedPreferences and check if the file exists
-  Future<void> _loadImage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedImagePath = prefs.getString('profile_image');
-
-    if (savedImagePath != null && File(savedImagePath).existsSync()) {
-      setState(() {
-        _imagePath = savedImagePath;  // Update the state with the loaded image path
-      });
-    }
-  }
-
-  // Save the selected image to the local file system
-  Future<File> _saveImageLocally(XFile image) async {
-    final directory = await getApplicationDocumentsDirectory();  // Get local directory
-    final String path = directory.path;
-    final File newImage = File('$path/profile_image.png');  // Define a local path for the image
-
-    return File(image.path).copy(newImage.path);  // Copy image to the new local path
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,15 +24,6 @@ class _AccountScreenState extends State<AccountScreen> {
           key: _formKey,
           child: Column(
             children: [
-              GestureDetector(
-                onTap: _pickImage, // Open image picker on tap
-                child: CircleAvatar(
-                  radius: 70,
-                  backgroundImage: _imagePath != null
-                      ? FileImage(File(_imagePath!))  // Load the image from local storage
-                      : const AssetImage('assets/room_icon.png') as ImageProvider, // Placeholder image
-                ),
-              ),
               const SizedBox(height: 20),
               ListTile(
                 title: const Text('Profile'),

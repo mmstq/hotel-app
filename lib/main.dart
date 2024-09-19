@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/firebase_options.dart';
+import 'package:hotel_app/middleware/middle_ware.dart';
 import 'package:hotel_app/screens/guest_dashboard.dart';
 import 'package:hotel_app/screens/profile.dart';
 import 'package:hotel_app/screens/sign_up.dart';
@@ -27,23 +28,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: 'Star Hotel',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(
-
-      ),
+      theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      initialRoute: '/login',
+      initialRoute: '/guestDashboard',
       getPages: [
         GetPage(name: '/login', page: () => SignInScreen()),
         GetPage(name: '/signUP', page: () => SignUpScreen()),
         // GetPage(name: '/rooms', page: () => RoomListScreen()),
-        GetPage(name: '/guestDashboard', page: () => DashboardScreen()),
-        GetPage(name: '/profile', page: () =>  ProfileScreen()),
         GetPage(
-            name: '/book-room', page: () => BookingScreen(room: Get.arguments)),
-        GetPage(name: '/booking-history', page: () => BookingHistoryScreen()),
-        GetPage(name: '/account', page: () => AccountScreen()),
+          name: '/guestDashboard',
+          page: () => DashboardScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/profile',
+          page: () => ProfileScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/book-room',
+          page: () => BookingScreen(room: Get.arguments),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/booking-history',
+          page: () => BookingHistoryScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
+        GetPage(
+          name: '/account',
+          page: () => AccountScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),
       ],
     );
   }
