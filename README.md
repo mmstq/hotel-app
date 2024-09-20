@@ -6,7 +6,7 @@ This Flutter-based Hotel Management App allows hotel staff and guests to manage 
 ## Instruction For Login
 **Guest**
    email: mustak@gmail.com
-   password: mustak
+   password: test123
 
 **Guest**
    email: staff1@gmail.com
