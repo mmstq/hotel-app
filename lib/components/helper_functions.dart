@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 bool isTablet() {
   // Getting the MediaQuery data from the context
@@ -23,3 +26,10 @@ double _calculateDiagonalInches(MediaQueryData mediaQuery) {
 }
 
 bool isStaff = false;
+
+Future<void> checkIfStaff()async{
+  final email = FirebaseAuth.instance.currentUser?.email;
+  final user = await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get();
+  isStaff = user.docs.first.get('isStaff') as bool;
+  Logger().d(isStaff);
+}

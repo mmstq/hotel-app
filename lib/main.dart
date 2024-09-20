@@ -29,10 +29,7 @@ void main() async {
     name: 'Hotel App',
     options: DefaultFirebaseOptions.android,
   );
-  final email = FirebaseAuth.instance.currentUser?.email;
-  final user = await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get();
-  isStaff = user.docs.first.get('isStaff') as bool;
-  Logger().d(isStaff);
+  await checkIfStaff();
   runApp( const MyApp());
 }
 

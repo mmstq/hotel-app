@@ -12,6 +12,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Booking History'),
+        actions: [],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -54,10 +55,26 @@ class BookingHistoryScreen extends GetView<BookingController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Room: ${booking.roomType}',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    'Room: ${booking.roomType}',
+                    style:
+                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.blue.withOpacity(0.5)
+                    ),
+                    child: Text(
+                      booking.checkInTime!.toDate().isBefore(DateTime.now())?'Past':'Upcoming',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 4),
               Row(
@@ -68,6 +85,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
                     'Price: ${booking.price}',
                     style: const TextStyle(fontSize: 14),
                   ),
+
                 ],
               ),
               const SizedBox(height: 4),

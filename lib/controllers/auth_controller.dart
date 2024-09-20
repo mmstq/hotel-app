@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hotel_app/components/helper_functions.dart';
 
 class AuthController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -44,8 +45,8 @@ class AuthController extends GetxController {
         if (isStaff) {
           Get.offAllNamed('/bookedRooms');
         } else {
-          Get.offAllNamed('/guestDashboard');
-        }
+          await checkIfStaff();
+      Get.offAllNamed('/guestDashboard');}
       } else {
         Get.snackbar(
           'Error',

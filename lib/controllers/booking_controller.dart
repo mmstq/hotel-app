@@ -31,8 +31,10 @@ class BookingController extends GetxController {
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       String userEmail = currentUser.email ?? '';
-      QuerySnapshot bookingSnapshot =
-          await _firestore.collection('room-booking').where(isStaff?'staffEmail':'userEmail', isEqualTo: userEmail).get();
+      QuerySnapshot bookingSnapshot = await _firestore
+          .collection('room-booking')
+          .where(isStaff ? 'staffEmail' : 'userEmail', isEqualTo: userEmail)
+          .get();
       bookings.value = bookingSnapshot.docs.map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>)).toList();
     }
     isLoading.value = false;
@@ -60,15 +62,10 @@ class BookingController extends GetxController {
         'checkinTime': room!.checkInTime,
         'checkoutTime': room!.checkOutTime,
         'isBooked': true,
-        if(isStaff) 'staffEmail': userEmail,
+        if (isStaff) 'staffEmail': userEmail,
       });
       Get.snackbar('Success', 'Room booked successfully', backgroundColor: Colors.blue);
-      if(isStaff) {
-        Get.toNamed('/guestDashboard');
-      } else {
-        Get.toNamed('/booking-history');
-
-      }
+      Get.offAndToNamed('/guestDashboard');
     } else {
       Get.snackbar('Error', 'You must be logged in to book a room', backgroundColor: Colors.red);
     }
