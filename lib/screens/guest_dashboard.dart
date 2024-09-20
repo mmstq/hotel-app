@@ -2,73 +2,68 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/screens/account.dart';
 import '../controllers/room_controller.dart';
 
-class DashboardScreen extends StatefulWidget {
-  @override
-  _DashboardScreenState createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  final RoomController roomController = Get.put(RoomController());
-  int _selectedIndex = 0;
+class DashboardScreen extends GetView<RoomController> {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: _selectedIndex == 0
-              ? const Text('Find Your Room')
-              : const Text('Account'),
-          actions: _selectedIndex == 0
-              ? [
-                  IconButton(
-                    icon: const Icon(Icons.filter_list),
-                    onPressed: () {
-                      _showFilterDialog(context);
-                    },
-                  ),
-                ]
-              : [],
-        ),
-        body: _selectedIndex == 0 ? _buildRoomList() : AccountScreen(),
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-            splashFactory: NoSplash.splashFactory, // Disable ripple effect
-            highlightColor: Colors.transparent, // Remove highlight on tap
+    return Obx(() => Scaffold(
+          appBar: AppBar(
+            title: controller.selectedIndex.value == 0
+                ? const Text('Find Your Room')
+                : const Text('Account'),
+            actions: controller.selectedIndex.value == 0
+                ? [
+                    IconButton(
+                      icon: const Icon(Icons.filter_list),
+                      onPressed: () {
+                        _showFilterDialog(context);
+                      },
+                    ),
+                  ]
+                : [],
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  width: 1,
-                  color: Get.theme.dividerColor.withOpacity(0.5),
+          body: controller.selectedIndex.value == 0
+              ? _buildRoomList()
+              : AccountScreen(),
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+              splashFactory: NoSplash.splashFactory, // Disable ripple effect
+              highlightColor: Colors.transparent, // Remove highlight on tap
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    width: 1,
+                    color: Get.theme.dividerColor.withOpacity(0.5),
+                  ),
                 ),
               ),
-            ),
-            child: BottomNavigationBar(
-              showUnselectedLabels: false,
-              currentIndex: _selectedIndex,
-              onTap: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: _selectedIndex == 0
-                      ? const Icon(CupertinoIcons.bed_double_fill)
-                      : const Icon(CupertinoIcons.bed_double),
-                  label: 'Rooms',
-                ),
-                BottomNavigationBarItem(
-                  icon: _selectedIndex == 1
-                      ? const Icon(CupertinoIcons.person_alt_circle_fill)
-                      : const Icon(CupertinoIcons.person_alt_circle),
-                  label: 'Account',
-                ),
-              ],
+              child: BottomNavigationBar(
+                currentIndex: controller.selectedIndex.value,
+                onTap: (index) {
+                  controller.selectedIndex.value = index;
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: controller.selectedIndex.value == 0
+                        ? const Icon(Icons.bed)
+                        : const Icon(Icons.bed_outlined),
+                    label: 'Rooms',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: controller.selectedIndex.value == 1
+                        ? const Icon(Icons.person_2)
+                        : const Icon(Icons.person_2_outlined),
+                    label: 'Account',
+                  ),
+                ],
+              ),
             ),
           ),
         ));
@@ -81,25 +76,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Expanded(
             child: Obx(() {
-              if (roomController.isLoading.value) {
+              if (controller.isLoading.value) {
                 return const Center(
                   child: CupertinoActivityIndicator(
                     radius: 20,
                   ),
                 );
               }
-              if (roomController.filteredRooms.isEmpty) {
-                return Container(
-                    child: const Center(child: Text('No rooms found')));
+              if (controller.rooms.isEmpty) {
+                return const Center(child: Text('No rooms found'));
               }
               return GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.9,
                 ),
-                itemCount: roomController.filteredRooms.length,
+                itemCount: controller.rooms.length,
                 itemBuilder: (context, index) {
-                  var room = roomController.filteredRooms[index];
+                  var room = controller.rooms[index];
                   return _buildRoomCard(room);
                 },
               );
@@ -110,19 +104,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildRoomCard(room) {
+  Widget _buildRoomCard(Room room) {
     return Container(
-      height: MediaQuery.sizeOf(context).height * 0.2,
+      height: Get.height * 0.2,
       decoration: BoxDecoration(
         color: Get.theme.cardColor,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-              color: Get.theme.dividerColor.withOpacity(0.2), // Shadow color
-              spreadRadius: 1, // Spread radius
-              blurRadius: 4, // Blur radius
-              offset: const Offset(0, 4))
-          // Shadow position (horizontal, vertical)
+            color: Get.theme.dividerColor.withOpacity(0.2), // Shadow color
+            spreadRadius: 1, // Spread radius
+            blurRadius: 4, // Blur radius
+            offset: const Offset(0, 4),
+          ), // Shadow position (horizontal, vertical)
         ],
       ),
       margin: const EdgeInsets.all(8),
@@ -131,24 +125,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Align(
             child: SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.1,
+              height: Get.height * 0.1,
               child: Image.asset(
                 'assets/room_icon.png',
                 fit: BoxFit.cover,
-                color: Get.theme.primaryColorLight,
+                color: Get.theme.dividerColor,
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Text(
-              '${room.type}',
+              '${room.roomType}',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('\$${room.price} / minute'),
+            child: Text('\$${room.price} / night'),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -164,10 +158,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: InputButton(
-              label: 'Book Now',
+              label: Text(
+                'Book Now',
+                style: Get.theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
               height: 40,
               onPressed: () {
-                Navigator.pushNamed(context, '/book-room', arguments: room);
+                Get.toNamed('/book-room', arguments: room);
               },
             ),
           ),
@@ -183,7 +183,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return AlertDialog(
           title: const Text('Filter and Sort Rooms'),
           content: SingleChildScrollView(
-            // Using SingleChildScrollView to handle potential overflow
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -194,29 +193,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ListTile(
                       title: const Text('All Rooms'),
                       onTap: () {
-                        roomController.filterRoomsByType('All');
+                        controller.filterRoomsByType('All');
                         Get.back();
                       },
-                      selected: roomController.selectedFilter.value == 'All',
                     ),
                     ListTile(
                       title: const Text('Deluxe'),
                       onTap: () {
-                        roomController.filterRoomsByType('Deluxe');
+                        controller.filterRoomsByType('Deluxe');
                         Get.back();
                       },
                     ),
                     ListTile(
                       title: const Text('Suite'),
                       onTap: () {
-                        roomController.filterRoomsByType('Suite');
+                        controller.filterRoomsByType('Suite');
                         Get.back();
                       },
                     ),
                     ListTile(
                       title: const Text('Standard'),
                       onTap: () {
-                        roomController.filterRoomsByType('Standard');
+                        controller.filterRoomsByType('Standard');
                         Get.back();
                       },
                     ),
@@ -229,14 +227,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ListTile(
                       title: const Text('Low to High'),
                       onTap: () {
-                        roomController.sortRoomsByPrice('LowToHigh');
+                        controller.sortRoomsByPrice(descending: false);
                         Get.back();
                       },
                     ),
                     ListTile(
                       title: const Text('High to Low'),
                       onTap: () {
-                        roomController.sortRoomsByPrice('HighToLow');
+                        controller.sortRoomsByPrice(descending: true);
                         Get.back();
                       },
                     ),

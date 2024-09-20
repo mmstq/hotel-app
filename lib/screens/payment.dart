@@ -223,7 +223,13 @@ class PaymentScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: InputButton(
-              label: 'Confirm Order',
+              label: Text(
+                'Confirm Booking',
+                style: Get.theme.textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               onPressed: () {
                 controller.isOrderConfirmed.value = true;
               },
@@ -273,7 +279,13 @@ class PaymentScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: InputButton(
-                  label: 'Continue Shopping',
+                  label: Text(
+                    'Continue Shopping',
+                    style: Get.theme.textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   labelColor:
                       Get.theme.textTheme.displaySmall!.color!.withOpacity(1),
                   backgroundColor: Get.theme.cardColor,
@@ -284,19 +296,6 @@ class PaymentScreen extends StatelessWidget {
                           builder: (context) => DashboardScreen(),
                         ),
                         (route) => false);
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: InputButton(
-                  label: 'Share',
-                  labelColor:
-                      Get.theme.textTheme.displaySmall!.color!.withOpacity(1),
-                  backgroundColor: Get.theme.cardColor,
-                  onPressed: () {
-                    // Action for sharing
                   },
                 ),
               ),

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import '../controllers/booking_controller.dart';
 import '../models/booking.dart';
 
-class BookingHistoryScreen extends StatelessWidget {
-  final BookingController bookingController = Get.put(BookingController());
+class BookingHistoryScreen extends GetView<BookingController> {
+  const BookingHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,74 +13,74 @@ class BookingHistoryScreen extends StatelessWidget {
         title: const Text('Booking History'),
       ),
       body: Obx(() {
-        if (bookingController.isLoading.value) {
+        if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (bookingController.bookings.isEmpty) {
+        if (controller.bookings.isEmpty) {
           return const Center(child: Text('No bookings found'));
         }
 
+        // Show all bookings in a simple list
         return ListView.builder(
-          itemCount: bookingController.bookings.length,
+          itemCount: controller.bookings.length,
           itemBuilder: (context, index) {
-            var booking = bookingController.bookings[index];
-            return _buildBookingCard(booking);
+            var booking = controller.bookings[index];
+            return _buildBookingItem(booking);
           },
         );
       }),
     );
   }
 
-  Widget _buildBookingCard(Booking booking) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              booking.room as String,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.calendar_today, size: 16),
-                const SizedBox(width: 8),
-                Text(
-                  'Check-In: ${booking.checkInDate.toLocal().toString().split(' ')[0]}',
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const Icon(Icons.calendar_today, size: 16),
-                const SizedBox(width: 8),
-                Text(
-                  'Check-Out: ${booking.checkOutDate.toLocal().toString().split(' ')[0]}',
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Status: ${booking.status}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: _getStatusColor(booking.status),
+  Widget _buildBookingItem(Booking booking) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Room: ${booking.roomType}', // Display room type
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today, size: 16),
+              const SizedBox(width: 8),
+              Text(
+                'Check-In: ${booking.checkinTime}',
+                style: const TextStyle(fontSize: 14),
               ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today, size: 16),
+              const SizedBox(width: 8),
+              Text(
+                'Check-Out: ${booking.checkoutTime}',
+                style: const TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Status: ${booking.isBooked}',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: _getStatusColor(booking.isBooked.toString()),
             ),
-          ],
-        ),
+          ),
+          const Divider(), // Add a divider to separate each booking
+        ],
       ),
     );
   }
 
+  // Function to return color based on booking status
   Color _getStatusColor(String status) {
     switch (status) {
       case 'completed':
