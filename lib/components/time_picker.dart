@@ -73,9 +73,7 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
                 width: 1.5),
           ),
           child: TextFormField(
-            onTapOutside: (event) {
-              Focus.of(context).unfocus();
-            },cursorColor: Colors.transparent,
+            cursorColor: Colors.transparent,
             controller: controller,
             enableInteractiveSelection: false,
             enabled: widget.enabled,

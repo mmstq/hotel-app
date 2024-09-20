@@ -45,7 +45,6 @@ class DashboardScreen extends GetView<RoomController> {
                 ),
               ),
               child: BottomNavigationBar(
-                showUnselectedLabels: false,
                 currentIndex: controller.selectedIndex.value,
                 onTap: (index) {
                   controller.selectedIndex.value = index;
