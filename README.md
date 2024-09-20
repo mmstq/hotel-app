@@ -3,6 +3,15 @@
 
 This Flutter-based Hotel Management App allows hotel staff and guests to manage room bookings, view available rooms, and handle check-in/check-out processes. The app provides a seamless user experience with a focus on clean code and best practices in Flutter development.
 
+## Instruction For Login
+**Guest**
+   email: mustak@gmail.com
+   password: mustak
+
+**Guest**
+   email: staff1@gmail.com
+   password: staff01
+
 ## Features
 
 1. **Login/Sign-Up**: 
@@ -18,7 +27,7 @@ This Flutter-based Hotel Management App allows hotel staff and guests to manage 
    - Booking confirmation after successful submission.
 
 4. **Check-In/Check-Out**:
-   - Guests can check in and check out, updating the room status accordingly.
+   - Guests can check in and out, and the room status will be updated accordingly.
 
 5. **Booking History**:
    - View past and upcoming bookings with room details, stay dates, and payment status.
@@ -91,31 +100,11 @@ This Flutter-based Hotel Management App allows hotel staff and guests to manage 
      flutter run
      ```
 
-4. **Database Setup**:
-   - For local database (SQLite or Hive), no setup is required.
-   - For Firebase:
-     - Create a Firebase project.
-     - Add Firebase configuration files (`google-services.json` for Android and `GoogleService-Info.plist` for iOS) to the respective directories.
 
 ## External Packages Used
 
-- **sqflite** or **hive**: For local data storage.
-- **firebase_auth**: For authentication (if using Firebase).
-- **provider** or **get**: For state management.
-- **flutter_secure_storage**: For secure data storage.
+- **firebase_auth**: For authentication.
+- **getx** or **get**: For state management.
+- **firestore**: For secure data storage.
 
-## Evaluation Criteria
 
-- **Code Quality**: Clean, maintainable code with meaningful comments.
-- **State Management**: Efficient use of state management.
-- **UI/UX Design**: Intuitive, responsive design.
-- **Functionality**: Accurate implementation of core features.
-- **Error Handling**: Proper error handling for various scenarios.
-
-## Contributing
-
-If you wish to contribute, please fork the repository and create a pull request with detailed changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
