@@ -34,8 +34,8 @@ class DashboardScreen extends GetView<RoomController> {
               : AccountScreen(),
           bottomNavigationBar: Theme(
             data: Theme.of(context).copyWith(
-              splashFactory: NoSplash.splashFactory, // Disable ripple effect
-              highlightColor: Colors.transparent, // Remove highlight on tap
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
             ),
             child: Container(
               decoration: BoxDecoration(
@@ -112,9 +112,9 @@ class DashboardScreen extends GetView<RoomController> {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Get.theme.dividerColor.withOpacity(0.2), // Shadow color
-            spreadRadius: 1, // Spread radius
-            blurRadius: 4, // Blur radius
+            color: Get.theme.dividerColor.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 4,
             offset: const Offset(1, 1),
           ), // Shadow position (horizontal, vertical)
         ],
@@ -125,7 +125,7 @@ class DashboardScreen extends GetView<RoomController> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CachedNetworkImage(
-            imageUrl: controller.roomImages[index],
+            imageUrl: room.image!,
             width: 200,
             height: 120,
             fit: BoxFit.fill,

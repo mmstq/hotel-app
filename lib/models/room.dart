@@ -10,6 +10,7 @@ class Room {
   List<String>? amenities;
   Timestamp? checkInTime;
   Timestamp? checkOutTime;
+  String? image;
 
   Room(
       {this.roomNo,
@@ -19,7 +20,9 @@ class Room {
         this.isBooked,
         this.amenities,
         this.checkInTime,
-        this.checkOutTime});
+        this.checkOutTime,
+        this.image,
+      });
 
   Room.fromJson(Map<String, dynamic> json) {
     roomNo = json['roomNo'];
@@ -30,6 +33,7 @@ class Room {
     amenities = json['amenities'].cast<String>();
     checkInTime = json['checkinTime'];
     checkOutTime = json['checkoutTime'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +46,7 @@ class Room {
     data['amenities'] = amenities;
     data['checkinTime'] = checkInTime;
     data['checkoutTime'] = checkOutTime;
+    data['image'] = image;
     return data;
   }
 }
