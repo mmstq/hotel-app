@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookingController extends GetxController {
-
   Room? room;
   final formKey = GlobalKey<FormState>();
   var bookings = <Booking>[].obs;
@@ -20,10 +19,12 @@ class BookingController extends GetxController {
 
   @override
   void onInit() {
-    room =  Get.arguments?['room'] as Room?;
+    room = Get.arguments?['room'] as Room?;
     fetchBookingHistory();
+    fetchBookings();
     super.onInit();
   }
+
   Future<void> fetchBookingHistory() async {
     isLoading.value = true;
     User? currentUser = _auth.currentUser;
@@ -39,6 +40,28 @@ class BookingController extends GetxController {
     }
     isLoading.value = false;
   }
+
+  // Fetch bookings from Firestore
+  Future<void> fetchBookings() async {
+    isLoading.value = true;
+    try {
+      User? currentUser = _auth.currentUser;
+      if (currentUser != null) {
+        QuerySnapshot snapshot = await _firestore
+            .collection('bookings') // Access 'bookings' collection in Firestore
+            .get();
+
+        bookings.value = snapshot.docs
+            .map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>))
+            .toList();
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch bookings: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> bookRoom(Room room) async {
     isLoading.value = true;
     User? currentUser = _auth.currentUser;
@@ -63,5 +86,4 @@ class BookingController extends GetxController {
     }
     isLoading.value = false;
   }
-
 }

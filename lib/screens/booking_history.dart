@@ -20,8 +20,6 @@ class BookingHistoryScreen extends GetView<BookingController> {
         if (controller.bookings.isEmpty) {
           return const Center(child: Text('No bookings found'));
         }
-
-        // Show all bookings in a simple list
         return ListView.builder(
           itemCount: controller.bookings.length,
           itemBuilder: (context, index) {
