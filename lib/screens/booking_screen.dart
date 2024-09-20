@@ -233,7 +233,8 @@ class BookingScreen extends GetView<BookingController> {
             ),
             InputButton(
               onPressed: () {
-                controller.bookRoom(controller.room!);
+                // controller.bookRoom(controller.room!);
+                Get.off(() => _buildOrderConfirmation());
               },
               label: const Text(
                 'Book Now',
@@ -250,7 +251,20 @@ class BookingScreen extends GetView<BookingController> {
 
   Widget _buildOrderConfirmation() {
     return Container(
-      color: Colors.blue,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.green,
+            Colors.green,
+            Colors.blue,
+            Colors.blue,
+            Colors.green,
+            Colors.green
+          ],
+        ),
+      ),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -267,6 +281,8 @@ class BookingScreen extends GetView<BookingController> {
                 'Confirmed',
                 style: TextStyle(
                   fontSize: 24,
+                  color: Colors.white,
+                  decoration: TextDecoration.none,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -274,13 +290,20 @@ class BookingScreen extends GetView<BookingController> {
               const Text(
                 'Thank you for your booking room. You will receive an email confirmation shortly.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.green,
+                  decoration: TextDecoration.none,
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
                 'Check the status of your booking on the booking tracking page.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(
+                  fontSize: 14,
+                  decoration: TextDecoration.none,
+                ),
               ),
               const SizedBox(height: 32),
               SizedBox(

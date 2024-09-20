@@ -36,61 +36,57 @@ class BookingHistoryScreen extends GetView<BookingController> {
   Widget _buildBookingItem(Booking booking) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Room: ${booking.roomType}', // Display room type
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Row(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey.shade600,
+            borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.calendar_today, size: 16),
-              const SizedBox(width: 8),
               Text(
-                'Check-In: ${booking.checkInTime}',
-                style: const TextStyle(fontSize: 14),
+                'Room: ${booking.roomType}',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Icon(Icons.monetization_on, size: 16),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Price: ${booking.price}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Icon(Icons.chair, size: 16),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Amenities: ${booking.amenities}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Booked Time: ${booking.checkInTime}',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              const Icon(Icons.calendar_today, size: 16),
-              const SizedBox(width: 8),
-              Text(
-                'Check-Out: ${booking.checkOutTime}',
-                style: const TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Status: ${booking.isBooked}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: _getStatusColor(booking.isBooked.toString()),
-            ),
-          ),
-          const Divider(), // Add a divider to separate each booking
-        ],
+        ),
       ),
     );
-  }
-
-  // Function to return color based on booking status
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'completed':
-        return Colors.green;
-      case 'upcoming':
-        return Colors.blue;
-      case 'canceled':
-        return Colors.red;
-      default:
-        return Colors.black;
-    }
   }
 }
