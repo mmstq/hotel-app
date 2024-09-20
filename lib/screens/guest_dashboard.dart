@@ -43,7 +43,7 @@ class DashboardScreen extends GetView<RoomController> {
                 ),
               ),
               child: BottomNavigationBar(
-                backgroundColor: Colors.white,
+                backgroundColor: Get.theme.cardColor,
                 selectedItemColor: Colors.blue,
                 currentIndex: controller.selectedIndex.value,
                 onTap: (index) {
@@ -111,7 +111,7 @@ class DashboardScreen extends GetView<RoomController> {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Get.theme.cardColor,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(

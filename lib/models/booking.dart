@@ -9,7 +9,7 @@ class Booking {
   Timestamp? checkInTime;
   Timestamp? checkOutTime;
   List<String>? amenities;
-  bool? isBooked;
+  String? staffEmail;
   String? paymentMethod;
 
   Booking({
@@ -20,7 +20,7 @@ class Booking {
     this.checkInTime,
     this.checkOutTime,
     this.amenities,
-    this.isBooked,
+    this.staffEmail,
     this.paymentMethod,
   });
 
@@ -34,7 +34,7 @@ class Booking {
       'checkinTime': checkInTime, // Format time for saving
       'checkoutTime': checkOutTime,
       'amenities': amenities,
-      'isBooked': isBooked,
+      'staffEmail': staffEmail,
       'paymentMethod': paymentMethod,
     };
   }
@@ -50,7 +50,7 @@ class Booking {
       amenities : json['amenities'].cast<String>(),
       checkInTime : (json['checkinTime']),
       checkOutTime : (json['checkoutTime']),
-      isBooked: json['isBooked'],
+      staffEmail: json['staffEmail'],
       paymentMethod: json['paymentMethod'],
     );
   }

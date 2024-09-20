@@ -29,7 +29,8 @@ void main() async {
   );
   final email = FirebaseAuth.instance.currentUser?.email;
   final user = await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get();
-  isStaff = user.docs.first.get('isStaff');
+  isStaff = user.docs.first.get('isStaff') as bool;
+  Logger().d(isStaff);
   runApp( const MyApp());
 }
 
@@ -41,8 +42,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Star Hotel',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.white,appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
-      darkTheme: ThemeData.dark().copyWith(primaryColor: Colors.blue),
+      theme: ThemeData.light().copyWith(cardColor: Colors.white,primaryColor: Colors.blue, scaffoldBackgroundColor: Colors.white,appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
+      darkTheme: ThemeData.dark().copyWith(cardColor: Colors.grey.shade800, primaryColor: Colors.blue),
       initialBinding: AppBinding(),
       themeMode: ThemeMode.system,
       initialRoute: '/guestDashboard',

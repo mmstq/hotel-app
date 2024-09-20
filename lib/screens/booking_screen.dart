@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/components/helper_functions.dart';
 import 'package:hotel_app/components/text_field.dart';
 import 'package:intl/intl.dart';
 import '../controllers/booking_controller.dart';
@@ -94,7 +95,7 @@ class BookingScreen extends GetView<BookingController> {
                       label: 'Check-in-time',
                       onTap: () async {
                         final Timestamp? time = await _selectAndDisplayTime(context);
-                        controller.room!.checkOutTime = time;
+                        controller.room!.checkInTime = time;
                         controller.checkInController.text = DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
                       },
                     ),
@@ -116,6 +117,20 @@ class BookingScreen extends GetView<BookingController> {
                         controller.checkOutController.text = DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
                       },
                       label: 'Check-out-time',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    if(isStaff)
+                    TextInputField(
+                      controller: controller.guestEmailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter guest email';
+                        }
+                        return null;
+                      },
+                      label: 'Guest Email',
                     ),
                   ],
                 ),
@@ -178,6 +193,7 @@ class BookingScreen extends GetView<BookingController> {
   }
 
   void _showPaymentOptions() {
+    int index = 0;
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(16),
@@ -200,32 +216,32 @@ class BookingScreen extends GetView<BookingController> {
               leading: const Icon(Icons.credit_card),
               title: const Text('Credit/Debit Card'),
               onTap: () {
+                controller.bookRoom('Credit/Debit Card');
+                Get.back();
+
+
               },
             ),
             ListTile(
               leading: const Icon(Icons.phone_android_outlined),
               title: const Text('UPI'),
               onTap: () {
+                controller.bookRoom('UPI');
+                Get.back();
+
+
               },
             ),
             ListTile(
               leading: const Icon(Icons.account_balance_wallet),
               title: const Text('Pay On Checkout'),
               onTap: () {
+                controller.bookRoom('Pay On CheckOut');
+                Get.back();
+
               },
             ),
-            InputButton(
-              onPressed: () {
-                // controller.bookRoom(controller.room!);
 
-
-                Get.off(() => _buildOrderConfirmation());
-              },
-              label: const Text(
-                'Book Now',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
           ],
         ),
       ),
