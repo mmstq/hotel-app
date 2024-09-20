@@ -20,7 +20,7 @@ class SignInScreen extends StatelessWidget {
         padding: const EdgeInsets.all(30),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: AutofillGroup(child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Align(
@@ -52,6 +52,8 @@ class SignInScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               TextInputField(
+                autofillHints: const [AutofillHints.email],
+
                 label: 'Email',
                 controller: authController.emailController,
                 prefixIcon: const Icon(Icons.alternate_email_outlined),
@@ -60,7 +62,7 @@ class SignInScreen extends StatelessWidget {
                     return 'Please enter your email';
                   }
                   if (!RegExp(
-                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                       .hasMatch(value)) {
                     return 'Please enter a valid email';
                   }
@@ -69,7 +71,8 @@ class SignInScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Obx(
-                () => TextInputField(
+                    () => TextInputField(
+                      autofillHints: const [AutofillHints.password],
                   obscureText: !authController.showPassword.value,
                   label: 'Password',
                   controller: authController.passwordController,
@@ -79,16 +82,16 @@ class SignInScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(0),
                     icon: authController.showPassword.value
                         ? const Icon(
-                            Icons.visibility_off,
-                            color: Colors.blue,
-                          )
+                      Icons.visibility_off,
+                      color: Colors.blue,
+                    )
                         : const Icon(
-                            Icons.visibility,
-                            color: Colors.grey,
-                          ),
+                      Icons.visibility,
+                      color: Colors.grey,
+                    ),
                     onPressed: () {
                       authController.showPassword.value =
-                          !authController.showPassword.value;
+                      !authController.showPassword.value;
                     },
                   ),
                   validator: (value) {
@@ -115,19 +118,19 @@ class SignInScreen extends StatelessWidget {
                 },
                 label: Obx(() => authController.isLoading.value
                     ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CupertinoActivityIndicator(
-                          color: Colors.white,
-                          radius: 15,
-                        ),
-                      )
+                  width: 20,
+                  height: 20,
+                  child: CupertinoActivityIndicator(
+                    color: Colors.white,
+                    radius: 15,
+                  ),
+                )
                     : const Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      )),
+                  'Sign In',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                )),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +153,7 @@ class SignInScreen extends StatelessWidget {
                 ],
               ),
             ],
-          ),
+          )),
         ),
       ),
     );

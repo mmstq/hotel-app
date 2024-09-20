@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
 import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/screens/account.dart';
+import 'package:text_scroll/text_scroll.dart';
 import '../controllers/room_controller.dart';
 
 class DashboardScreen extends GetView<RoomController> {
@@ -45,6 +47,7 @@ class DashboardScreen extends GetView<RoomController> {
                 ),
               ),
               child: BottomNavigationBar(
+                selectedItemColor: Colors.blue,
                 currentIndex: controller.selectedIndex.value,
                 onTap: (index) {
                   controller.selectedIndex.value = index;
@@ -52,14 +55,14 @@ class DashboardScreen extends GetView<RoomController> {
                 items: [
                   BottomNavigationBarItem(
                     icon: controller.selectedIndex.value == 0
-                        ? const Icon(Icons.bed)
+                        ? const Icon(Icons.bed, color: Colors.blue,)
                         : const Icon(Icons.bed_outlined),
                     label: 'Rooms',
                   ),
                   BottomNavigationBarItem(
                     icon: controller.selectedIndex.value == 1
-                        ? const Icon(Icons.person_2)
-                        : const Icon(Icons.person_2_outlined),
+                        ? const Icon(Icons.person, color: Colors.blue,)
+                        : const Icon(Icons.person_outlined),
                     label: 'Account',
                   ),
                 ],
@@ -70,43 +73,40 @@ class DashboardScreen extends GetView<RoomController> {
   }
 
   Widget _buildRoomList() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      child: Column(
-        children: [
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(
-                  child: CupertinoActivityIndicator(
-                    radius: 20,
-                  ),
-                );
-              }
-              if (controller.rooms.isEmpty) {
-                return const Center(child: Text('No rooms found'));
-              }
-              return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.9,
+    return Column(
+      children: [
+        Expanded(
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(
+                child: CupertinoActivityIndicator(
+                  radius: 20,
                 ),
-                itemCount: controller.rooms.length,
-                itemBuilder: (context, index) {
-                  var room = controller.rooms[index];
-                  return _buildRoomCard(room);
-                },
               );
-            }),
-          ),
-        ],
-      ),
+            }
+            if (controller.rooms.isEmpty) {
+              return const Center(child: Text('No rooms found'));
+            }
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: controller.rooms.length,
+              itemBuilder: (context, index) {
+                var room = controller.rooms[index];
+                return _buildRoomCard(room, index);
+              },
+            );
+          }),
+        ),
+      ],
     );
   }
 
-  Widget _buildRoomCard(Room room) {
+  Widget _buildRoomCard(Room room, int index) {
     return Container(
-      height: Get.height * 0.2,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: Get.theme.cardColor,
         borderRadius: BorderRadius.circular(14),
@@ -115,62 +115,87 @@ class DashboardScreen extends GetView<RoomController> {
             color: Get.theme.dividerColor.withOpacity(0.2), // Shadow color
             spreadRadius: 1, // Spread radius
             blurRadius: 4, // Blur radius
-            offset: const Offset(0, 4),
+            offset: const Offset(1, 1),
           ), // Shadow position (horizontal, vertical)
         ],
       ),
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Align(
-            child: SizedBox(
-              height: Get.height * 0.1,
-              child: Image.asset(
-                'assets/room_icon.png',
-                fit: BoxFit.cover,
-                color: Get.theme.dividerColor,
+          CachedNetworkImage(
+            imageUrl: controller.roomImages[index],
+            width: 200,
+            height: 120,
+            fit: BoxFit.fill,
+            placeholder: (context, url) => const SizedBox(
+              height: 24,
+              width: 24,
+              child: Center(
+                child: CircularProgressIndicator(), // Show a loader while loading
+              ),
+            ),
+            errorWidget: (context, url, error) => const Center(
+              child: Icon(
+                Icons.error, // Show an error icon if image fails to load
+                color: Colors.red,
+                size: 40.0,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Text(
-              '${room.roomType}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('\$${room.price} / night'),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              '${room.amenities}',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color:
-                    Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: InputButton(
-              label: Text(
-                'Book Now',
-                style: Get.theme.textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      '${room.roomType}',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text('\$${room.price} / night'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: TextScroll(
+                      room.amenities!.join(' | '),
+                      velocity: const Velocity(pixelsPerSecond: Offset(50, 0)),
+                      delayBefore: const Duration(milliseconds: 500),
+                      numberOfReps: 1,
+                      pauseBetween: const Duration(milliseconds: 50),
+                      style: TextStyle(
+                        color:
+                        Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: InputButton(
+                      label: Text(
+                        'Book Now',
+                        style: Get.theme.textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      height: 32,
+                      onPressed: () {
+                        Get.toNamed('/book-room', arguments: {'room':room});
+                      },
+                    ),
+                  ),
+                ],
               ),
-              height: 40,
-              onPressed: () {
-                Get.toNamed('/book-room', arguments: {'room':room});
-              },
             ),
-          ),
+          )
         ],
       ),
     );

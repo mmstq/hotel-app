@@ -42,6 +42,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 },
               ),
               SwitchListTile(
+                thumbColor: const WidgetStatePropertyAll(Colors.white),
+                trackColor: const WidgetStatePropertyAll(Colors.blue),
+                trackOutlineColor: const WidgetStatePropertyAll(Colors.blue),
                 title: const Text('Dark Mode'),
                 value: Get.isDarkMode,
                 onChanged: (value) {

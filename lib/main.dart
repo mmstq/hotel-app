@@ -34,8 +34,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Star Hotel',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData.light().copyWith(appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
+      darkTheme: ThemeData.dark().copyWith(primaryColor: Colors.blue),
       initialBinding: AppBinding(),
       themeMode: ThemeMode.system,
       initialRoute: '/guestDashboard',

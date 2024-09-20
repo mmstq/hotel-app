@@ -23,95 +23,71 @@ class BookingScreen extends GetView<BookingController> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 250,
-                child: Image.asset(
-                  'assets/room_icon.png',
-                  fit: BoxFit.cover,
-                  color: Get.theme.primaryColorLight,
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  height: 250,
+                  child: Image.asset(
+                    'assets/room_icon.png',
+                    fit: BoxFit.cover,
+                    color: Get.theme.primaryColorLight,
+                  ),
                 ),
               ),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Room Package',
-                        style: Get.theme.textTheme.headlineLarge!.copyWith(
-                            fontSize: 14,
-                            color: Get.theme.textTheme.labelSmall!.color
-                                ?.withOpacity(0.7)),
-                      ),
-                      Text(
-                        controller.room!.roomType!,
-                        style: Get.theme.textTheme.headlineLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Room Package',
+                    style: Get.theme.textTheme.labelLarge
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Price/minute',
-                        style: Get.theme.textTheme.headlineLarge!.copyWith(
-                            fontSize: 14,
-                            color: Get.theme.textTheme.labelSmall!.color
-                                ?.withOpacity(0.7)),
-                      ),
-                      Text(
-                        ' \$${controller.room!.price} ',
-                        style: Get.theme.textTheme.headlineLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Amenities',
-                          style: Get.theme.textTheme.headlineLarge!.copyWith(
-                              fontSize: 14,
-                              color: Get.theme.textTheme.labelSmall!.color
-                                  ?.withOpacity(0.7)),
-                        ),
-                        SizedBox(
-                          height: 60,
-                          child: Text(
-                            '${controller.room!.amenities} ',
-                            maxLines: 4,
-                            overflow: TextOverflow.clip,
-                            style: Get.theme.textTheme.headlineLarge!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey.shade600),
-                          ),
-                        ),
-                      ],
+                  Text(
+                    controller.room!.roomType!,
+                    style: Get.theme.textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.blue,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16,),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Per Night',
+                    style: Get.theme.textTheme.labelLarge
+                  ),
+                  Text(
+                    '₹${controller.room!.price!.toInt()} ',
+                    style: Get.theme.textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16,),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Amenities',
+                    style: Get.theme.textTheme.labelLarge
+                  ),
+                  Wrap(
+                    spacing: 12.0,
+                    runSpacing: 0.0,
+                    children: generateChips(controller.room!.amenities!), // Call the method here
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               TextInputField(
                 isReadOnly: true,
                 controller: controller.checkInController,
@@ -155,7 +131,7 @@ class BookingScreen extends GetView<BookingController> {
         padding: const EdgeInsets.all(16),
         child: InputButton(
           label: Text(
-            'Pay',
+            'Book',
             style: Get.theme.textTheme.titleMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w500,
@@ -169,6 +145,16 @@ class BookingScreen extends GetView<BookingController> {
         ),
       ),
     );
+  }
+
+  List<Widget> generateChips(List<String> labels) {
+    return labels.map((label) {
+      return Chip(
+        label: Text(label),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        backgroundColor: Colors.blue.shade100,
+      );
+    }).toList();
   }
 
   Future<Timestamp?> _selectAndDisplayTime(BuildContext context) async {
