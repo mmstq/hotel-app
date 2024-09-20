@@ -38,9 +38,4 @@ class RoomController extends GetxController {
     isLoading.value = false;
   }
 
-  void bookRoom(Room room) {
-    room.isBooked = false;
-    rooms.refresh();
-    Get.snackbar('Success', 'Room booked successfully');
-  }
 }

@@ -32,7 +32,7 @@ class BookingController extends GetxController {
     if (currentUser != null) {
       String userEmail = currentUser.email ?? '';
       QuerySnapshot bookingSnapshot =
-          await _firestore.collection('room-booking').where('userEmail', isEqualTo: userEmail).get();
+          await _firestore.collection('room-booking').where(isStaff?'staffEmail':'userEmail', isEqualTo: userEmail).get();
       bookings.value = bookingSnapshot.docs.map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>)).toList();
     }
     isLoading.value = false;
@@ -59,6 +59,7 @@ class BookingController extends GetxController {
         'userEmail': isStaff ? guestEmailController.text : userEmail,
         'checkinTime': room!.checkInTime,
         'checkoutTime': room!.checkOutTime,
+        'isBooked': true,
         if(isStaff) 'staffEmail': userEmail,
       });
       Get.snackbar('Success', 'Room booked successfully', backgroundColor: Colors.blue);

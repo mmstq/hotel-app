@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../controllers/booking_controller.dart';
 import '../models/booking.dart';
 
@@ -37,7 +38,9 @@ class BookingHistoryScreen extends GetView<BookingController> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Container(
+
         decoration: BoxDecoration(
+
             boxShadow: [
               BoxShadow(
                 color: Get.theme.dividerColor.withOpacity(0.2),
@@ -46,7 +49,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
                 offset: const Offset(1, 1),
               ), // Shadow position (horizontal, vertical)
             ],
-            color: Colors.white,
+            color: Get.theme.cardColor,
             borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
@@ -89,7 +92,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Booked Time: ${booking.checkInTime}',
+                'Booked Time: ${DateFormat('dd MMM, yy hh:mm a').format(booking.checkInTime!.toDate())}',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
