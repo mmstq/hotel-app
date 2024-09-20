@@ -28,27 +28,47 @@ class AuthController extends GetxController {
     passwordController.clear();
   }
 
-  // Function to handle login and Firebase Authentication
   Future<void> loginUser(String email, String password) async {
     isLoading.value = true;
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      isLoading.value = false;
-      Get.offAllNamed('/guestDashboard');
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      if (userDoc.exists) {
+        bool isStaff = userDoc['isStaff'];
+        if (isStaff) {
+          Get.offAllNamed('/bookedRooms');
+        } else {
+          Get.offAllNamed('/guestDashboard');
+        }
+      } else {
+        Get.snackbar(
+          'Error',
+          'User data not found in Firestore.',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     } catch (e) {
       Get.snackbar(
         'Error',
-        'An unknown error occurred.',
+        'An error occurred: ${e.toString()}',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    } finally {
       isLoading.value = false;
     }
   }
+
+
 
   Future<void> register(String email, String password, bool isGuest) async {
     isLoading.value = true;

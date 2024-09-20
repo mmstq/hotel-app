@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app_binding.dart';
 import 'package:hotel_app/bindings/auth_binding.dart';
+import 'package:hotel_app/bindings/booked_room_binding.dart';
 import 'package:hotel_app/bindings/booking_binding.dart';
 import 'package:hotel_app/bindings/dashboard_binding.dart';
 import 'package:hotel_app/bindings/profile_binding.dart';
 import 'package:hotel_app/components/helper_functions.dart';
 import 'package:hotel_app/firebase_options.dart';
 import 'package:hotel_app/middleware/middle_ware.dart';
+import 'package:hotel_app/screens/booked_rooms.dart';
 import 'package:hotel_app/screens/guest_dashboard.dart';
 import 'package:hotel_app/screens/profile.dart';
 import 'package:hotel_app/screens/sign_up.dart';
@@ -86,6 +88,13 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/account',
           page: () => AccountScreen(),
+          middlewares: [
+            AuthMiddleware(),
+          ],
+        ),GetPage(
+          name: '/bookedRooms',
+          page: () => const BookedRoomsScreen(),
+          binding: BookedRoomBinding(),
           middlewares: [
             AuthMiddleware(),
           ],
