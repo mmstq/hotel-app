@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/components/helper_functions.dart';
 import 'package:hotel_app/components/text_field.dart';
 import 'package:intl/intl.dart';
 import '../controllers/booking_controller.dart';
@@ -20,26 +21,38 @@ class BookingScreen extends GetView<BookingController> {
       body: SingleChildScrollView(
         child: Form(
           key: controller.formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                    height: 250,
-                    child: Image.asset(
-                      'assets/room_icon.png',
-                      fit: BoxFit.cover,
-                      color: Get.theme.primaryColorLight,
-                    ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CachedNetworkImage(
+                imageUrl: controller.room!.image!,
+                width: Get.width,
+                height: 220,
+                fit: BoxFit.fill,
+                placeholder: (context, url) => const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Center(
+                    child: CircularProgressIndicator(), // Show a loader while loading
                   ),
                 ),
-                Column(
+                errorWidget: (context, url, error) => const Center(
+                  child: Icon(
+                    Icons.error, // Show an error icon if image fails to load
+                    color: Colors.red,
+                    size: 40.0,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Room Package', style: Get.theme.textTheme.labelLarge),
+                    Text(
+                      'Room Package',
+                      style: Get.theme.textTheme.labelLarge
+                    ),
                     Text(
                       controller.room!.roomType!,
                       style: Get.theme.textTheme.headlineLarge!.copyWith(
@@ -48,14 +61,9 @@ class BookingScreen extends GetView<BookingController> {
                         color: Colors.blue,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ),
                     Text('Per Night', style: Get.theme.textTheme.labelLarge),
                     Text(
                       '₹${controller.room!.price!.toInt()} ',
@@ -65,64 +73,69 @@ class BookingScreen extends GetView<BookingController> {
                         color: Colors.blue,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ),
                     Text('Amenities', style: Get.theme.textTheme.labelLarge),
                     Wrap(
                       spacing: 12.0,
                       runSpacing: 0.0,
-                      children: generateChips(
-                        controller.room!.amenities!,
-                      ), // Call the method here
+                      children: generateChips(controller.room!.amenities!,), // Call the method here
+                    ),
+                    const SizedBox(height: 16),
+                    TextInputField(
+                      isReadOnly: true,
+                      controller: controller.checkInController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select check in time';
+                        }
+                        return null;
+                      },
+                      label: 'Check-in-time',
+                      onTap: () async {
+                        final Timestamp? time = await _selectAndDisplayTime(context);
+                        controller.room!.checkInTime = time;
+                        controller.checkInController.text = DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextInputField(
+                      isReadOnly: true,
+                      controller: controller.checkOutController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select check out time';
+                        }
+                        return null;
+                      },
+                      onTap: () async {
+                        final Timestamp? time = await _selectAndDisplayTime(context);
+                        controller.room!.checkOutTime = time;
+                        controller.checkOutController.text = DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
+                      },
+                      label: 'Check-out-time',
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    if(isStaff)
+                    TextInputField(
+                      controller: controller.guestEmailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter guest email';
+                        }
+                        return null;
+                      },
+                      label: 'Guest Email',
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                TextInputField(
-                  isReadOnly: true,
-                  controller: controller.checkInController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select checkin time';
-                    }
-                    return null;
-                  },
-                  label: 'Check-in-time',
-                  onTap: () async {
-                    final Timestamp? time =
-                        await _selectAndDisplayTime(context);
-                    controller.checkInController.text =
-                        DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextInputField(
-                  isReadOnly: true,
-                  controller: controller.checkOutController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select checkout time';
-                    }
-                    return null;
-                  },
-                  onTap: () async {
-                    final Timestamp? time =
-                        await _selectAndDisplayTime(context);
-                    controller.checkOutController.text =
-                        DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
-                  },
-                  label: 'Check-out-time',
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
@@ -180,6 +193,7 @@ class BookingScreen extends GetView<BookingController> {
   }
 
   void _showPaymentOptions() {
+    int index = 0;
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(16),
@@ -202,40 +216,38 @@ class BookingScreen extends GetView<BookingController> {
               leading: const Icon(Icons.credit_card),
               title: const Text('Credit/Debit Card'),
               onTap: () {
-                _handlePayment('card');
+                controller.bookRoom('Credit/Debit Card');
+                Get.back();
+
+
               },
             ),
             ListTile(
               leading: const Icon(Icons.phone_android_outlined),
               title: const Text('UPI'),
               onTap: () {
-                _handlePayment('upi');
+                controller.bookRoom('UPI');
+                Get.back();
+
+
               },
             ),
             ListTile(
               leading: const Icon(Icons.account_balance_wallet),
-              title: const Text('Pay on Checkout'),
+              title: const Text('Pay On Checkout'),
               onTap: () {
-                _handlePayment('pay_on_checkout');
+                controller.bookRoom('Pay On CheckOut');
+                Get.back();
+
               },
             ),
-            InputButton(
-              onPressed: () {
-                // controller.bookRoom(controller.room!);
-                Get.off(() => _buildOrderConfirmation());
-              },
-              label: const Text(
-                'Book Now',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
+
           ],
         ),
       ),
     );
   }
 
-  _handlePayment(String paymentMethod) {}
 
   Widget _buildOrderConfirmation() {
     return Container(
@@ -276,8 +288,7 @@ class BookingScreen extends GetView<BookingController> {
                 'Check the status of your booking on the booking history page.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
+                  fontSize: 14,color: Colors.white,
                   decoration: TextDecoration.none,
                 ),
               ),
@@ -286,7 +297,7 @@ class BookingScreen extends GetView<BookingController> {
                 width: double.infinity,
                 child: InputButton(
                   label: Text(
-                    'Done',
+                    'Continue Shopping',
                     style: Get.theme.textTheme.titleMedium?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,

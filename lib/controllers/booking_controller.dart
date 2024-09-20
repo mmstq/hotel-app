@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/components/helper_functions.dart';
 import 'package:hotel_app/models/booking.dart';
 import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/provider/base_provider.dart';
@@ -14,6 +15,7 @@ class BookingController extends GetxController {
   final provider = Get.find<BaseProvider>();
   final checkInController = TextEditingController();
   final checkOutController = TextEditingController();
+  final guestEmailController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -21,7 +23,6 @@ class BookingController extends GetxController {
   void onInit() {
     room = Get.arguments?['room'] as Room?;
     fetchBookingHistory();
-    fetchBookings();
     super.onInit();
   }
 
@@ -30,59 +31,45 @@ class BookingController extends GetxController {
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       String userEmail = currentUser.email ?? '';
-      QuerySnapshot bookingSnapshot = await _firestore
-          .collection('room-booking')
-          .where('userEmail', isEqualTo: userEmail)
-          .get();
-      bookings.value = bookingSnapshot.docs
-          .map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
+      QuerySnapshot bookingSnapshot =
+          await _firestore.collection('room-booking').where('userEmail', isEqualTo: userEmail).get();
+      bookings.value = bookingSnapshot.docs.map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>)).toList();
     }
     isLoading.value = false;
   }
 
-  // Fetch bookings from Firestore
-  Future<void> fetchBookings() async {
-    isLoading.value = true;
-    try {
-      User? currentUser = _auth.currentUser;
-      if (currentUser != null) {
-        QuerySnapshot snapshot = await _firestore
-            .collection('bookings') // Access 'bookings' collection in Firestore
-            .get();
-
-        bookings.value = snapshot.docs
-            .map((doc) => Booking.fromJson(doc.data() as Map<String, dynamic>))
-            .toList();
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch bookings: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> bookRoom(Room room) async {
+  Future<void> bookRoom(String payment) async {
     isLoading.value = true;
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       String userEmail = currentUser.email ?? '';
       Booking newBooking = Booking(
-        userEmail: userEmail,
-        roomId: room.id,
-        roomType: room.roomType!,
-        price: room.price,
-        checkInTime: room.checkInTime,
-        checkOutTime: room.checkOutTime,
-        amenities: room.amenities,
-        isBooked: true,
-        paymentMethod: 'paymentMethod',
+        userEmail: isStaff ? guestEmailController.text : userEmail,
+        roomId: room!.id,
+        roomType: room!.roomType!,
+        price: room!.price,
+        checkInTime: room!.checkInTime,
+        checkOutTime: room!.checkOutTime,
+        amenities: room!.amenities,
+        staffEmail: isStaff ? userEmail : null,
+        paymentMethod: payment,
       );
       await _firestore.collection('room-booking').add(newBooking.toJson());
-      Get.snackbar('Success', 'Room booked successfully');
-      fetchBookingHistory(); // Refresh booking history after booking
+      await _firestore.collection('rooms').doc(room!.id).update({
+        'userEmail': isStaff ? guestEmailController.text : userEmail,
+        'checkinTime': room!.checkInTime,
+        'checkoutTime': room!.checkOutTime,
+        if(isStaff) 'staffEmail': userEmail,
+      });
+      Get.snackbar('Success', 'Room booked successfully', backgroundColor: Colors.blue);
+      if(isStaff) {
+        Get.toNamed('/guestDashboard');
+      } else {
+        Get.toNamed('/booking-history');
+
+      }
     } else {
-      Get.snackbar('Error', 'You must be logged in to book a room');
+      Get.snackbar('Error', 'You must be logged in to book a room', backgroundColor: Colors.red);
     }
     isLoading.value = false;
   }

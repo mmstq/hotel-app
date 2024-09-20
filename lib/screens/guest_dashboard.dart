@@ -15,9 +15,7 @@ class DashboardScreen extends GetView<RoomController> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: controller.selectedIndex.value == 0
-                ? const Text('Find Your Room')
-                : const Text('Account'),
+            title: controller.selectedIndex.value == 0 ? const Text('Find Your Room') : const Text('Account'),
             actions: controller.selectedIndex.value == 0
                 ? [
                     IconButton(
@@ -29,9 +27,7 @@ class DashboardScreen extends GetView<RoomController> {
                   ]
                 : [],
           ),
-          body: controller.selectedIndex.value == 0
-              ? _buildRoomList()
-              : AccountScreen(),
+          body: controller.selectedIndex.value == 0 ? _buildRoomList() : AccountScreen(),
           bottomNavigationBar: Theme(
             data: Theme.of(context).copyWith(
               splashFactory: NoSplash.splashFactory,
@@ -47,6 +43,7 @@ class DashboardScreen extends GetView<RoomController> {
                 ),
               ),
               child: BottomNavigationBar(
+                backgroundColor: Get.theme.cardColor,
                 selectedItemColor: Colors.blue,
                 currentIndex: controller.selectedIndex.value,
                 onTap: (index) {
@@ -55,13 +52,19 @@ class DashboardScreen extends GetView<RoomController> {
                 items: [
                   BottomNavigationBarItem(
                     icon: controller.selectedIndex.value == 0
-                        ? const Icon(Icons.bed, color: Colors.blue,)
+                        ? const Icon(
+                            Icons.bed,
+                            color: Colors.blue,
+                          )
                         : const Icon(Icons.bed_outlined),
                     label: 'Rooms',
                   ),
                   BottomNavigationBarItem(
                     icon: controller.selectedIndex.value == 1
-                        ? const Icon(Icons.person, color: Colors.blue,)
+                        ? const Icon(
+                            Icons.person,
+                            color: Colors.blue,
+                          )
                         : const Icon(Icons.person_outlined),
                     label: 'Account',
                   ),
@@ -160,19 +163,18 @@ class DashboardScreen extends GetView<RoomController> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('\$${room.price} / night'),
+                    child: Text('₹${room.price} / night'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: TextScroll(
                       room.amenities!.join(' | '),
-                      velocity: const Velocity(pixelsPerSecond: Offset(50, 0)),
+                      velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
                       delayBefore: const Duration(milliseconds: 500),
-                      numberOfReps: 1,
+                      mode: TextScrollMode.bouncing,
                       pauseBetween: const Duration(milliseconds: 50),
                       style: TextStyle(
-                        color:
-                        Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
+                        color: Get.theme.textTheme.displaySmall!.color?.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -188,7 +190,7 @@ class DashboardScreen extends GetView<RoomController> {
                       ),
                       height: 32,
                       onPressed: () {
-                        Get.toNamed('/book-room', arguments: {'room':room});
+                        Get.toNamed('/book-room', arguments: {'room': room});
                       },
                     ),
                   ),

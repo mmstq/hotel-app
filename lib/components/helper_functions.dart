@@ -21,3 +21,5 @@ double _calculateDiagonalInches(MediaQueryData mediaQuery) {
   // Calculating the diagonal size using Pythagoras' theorem
   return sqrt(widthInches * widthInches + heightInches * heightInches); // Using sqrt from dart:math
 }
+
+bool isStaff = false;
