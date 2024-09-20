@@ -65,7 +65,7 @@ class BookingController extends GetxController {
         checkOutTime: room.checkOutTime,
         amenities: room.amenities,
         isBooked: true,
-        paymentMethod: 'Payment on checkout'
+        paymentMethod: 'paymentMethod',
       );
 
       // Save booking to Firestore
