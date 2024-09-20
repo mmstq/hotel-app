@@ -1,20 +1,57 @@
-import 'package:hotel_app/models/room.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Booking {
-  final String id;
-  final Room room;
-  // final User user;
-  final DateTime checkInDate;
-  final DateTime checkOutDate;
-  late final String status; // 'booked', 'checked-in', 'checked-out'
+  String? userEmail;
+  String? roomId;
+  String? roomType;
+  double? price;
+  Timestamp? checkinTime;
+  Timestamp? checkoutTime;
+  List<String>? amenities;
+  bool? isBooked;
+  String? paymentMethod;
 
   Booking({
-    required this.id,
-    required this.room,
-    // required this.user,
-    required this.checkInDate,
-    required this.checkOutDate,
-    this.status = 'booked',
+    required this.userEmail,
+    required this.roomId,
+    required this.roomType,
+    required this.price,
+    required this.checkinTime,
+    required this.checkoutTime,
+    required this.amenities,
+    required this.isBooked,
+    required this.paymentMethod,
   });
+
+  // Convert Booking object to JSON for Firestore
+  Map<String, dynamic> toJson() {
+    return {
+      'userEmail': userEmail,
+      'roomId': roomId,
+      'roomType': roomType,
+      'price': price,
+      'checkinTime': checkinTime, // Format time for saving
+      'checkoutTime': checkoutTime,
+      'amenities': amenities,
+      'isBooked': isBooked,
+      'paymentMethod': paymentMethod,
+    };
+  }
+
+  // Create Booking object from Firestore data
+  factory Booking.fromJson(Map<String, dynamic> json) {
+
+    return Booking(
+      userEmail: json['userEmail'],
+      roomId: json['roomId'],
+      roomType: json['roomType'],
+      price: json['price'],
+      amenities : json['amenities'].cast<String>(),
+      checkinTime : (json['checkinTime']as Timestamp),
+      checkoutTime : (json['checkoutTime']as Timestamp),
+      isBooked: json['isBooked'],
+      paymentMethod: json['paymentMethod'],
+    );
+  }
 }
