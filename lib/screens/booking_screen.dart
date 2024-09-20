@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
@@ -38,10 +39,7 @@ class BookingScreen extends GetView<BookingController> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Room Package',
-                      style: Get.theme.textTheme.labelLarge
-                    ),
+                    Text('Room Package', style: Get.theme.textTheme.labelLarge),
                     Text(
                       controller.room!.roomType!,
                       style: Get.theme.textTheme.headlineLarge!.copyWith(
@@ -52,14 +50,13 @@ class BookingScreen extends GetView<BookingController> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16,),
+                const SizedBox(
+                  height: 16,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Per Night',
-                      style: Get.theme.textTheme.labelLarge
-                    ),
+                    Text('Per Night', style: Get.theme.textTheme.labelLarge),
                     Text(
                       '₹${controller.room!.price!.toInt()} ',
                       style: Get.theme.textTheme.headlineLarge!.copyWith(
@@ -70,19 +67,19 @@ class BookingScreen extends GetView<BookingController> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16,),
-        
+                const SizedBox(
+                  height: 16,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Amenities',
-                      style: Get.theme.textTheme.labelLarge
-                    ),
+                    Text('Amenities', style: Get.theme.textTheme.labelLarge),
                     Wrap(
                       spacing: 12.0,
                       runSpacing: 0.0,
-                      children: generateChips(controller.room!.amenities!,), // Call the method here
+                      children: generateChips(
+                        controller.room!.amenities!,
+                      ), // Call the method here
                     ),
                   ],
                 ),
@@ -98,7 +95,8 @@ class BookingScreen extends GetView<BookingController> {
                   },
                   label: 'Check-in-time',
                   onTap: () async {
-                    final Timestamp? time = await _selectAndDisplayTime(context);
+                    final Timestamp? time =
+                        await _selectAndDisplayTime(context);
                     controller.checkInController.text =
                         DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
                   },
@@ -116,7 +114,8 @@ class BookingScreen extends GetView<BookingController> {
                     return null;
                   },
                   onTap: () async {
-                    final Timestamp? time = await _selectAndDisplayTime(context);
+                    final Timestamp? time =
+                        await _selectAndDisplayTime(context);
                     controller.checkOutController.text =
                         DateFormat('dd-MM-yyyy hh:mm a').format(time!.toDate());
                   },
@@ -150,7 +149,10 @@ class BookingScreen extends GetView<BookingController> {
   List<Widget> generateChips(List<String> labels) {
     return labels.map((label) {
       return Chip(
-        label: Text(label,style: TextStyle(color: Colors.blue.shade600),),
+        label: Text(
+          label,
+          style: TextStyle(color: Colors.blue.shade600),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         backgroundColor: Colors.blue.shade100,
       );
@@ -237,21 +239,7 @@ class BookingScreen extends GetView<BookingController> {
 
   Widget _buildOrderConfirmation() {
     return Container(
-      decoration:  BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.green,
-            Colors.green,
-            Colors.blue,
-            Colors.grey.shade500,
-            Colors.blue,
-            Colors.green,
-            Colors.green
-          ],
-        ),
-      ),
+      decoration: BoxDecoration(color: Get.theme.cardColor),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -261,7 +249,7 @@ class BookingScreen extends GetView<BookingController> {
               const Icon(
                 Icons.check_circle,
                 size: 100,
-                color: Colors.white,
+                color: Colors.blue,
               ),
               const SizedBox(height: 24),
               const Text(
@@ -275,7 +263,7 @@ class BookingScreen extends GetView<BookingController> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Thank you for your booking room. You will receive an email confirmation shortly.',
+                'Thank you for your booking room.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -285,10 +273,11 @@ class BookingScreen extends GetView<BookingController> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Check the status of your booking on the booking tracking page.',
+                'Check the status of your booking on the booking history page.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,color: Colors.white,
+                  fontSize: 14,
+                  color: Colors.white,
                   decoration: TextDecoration.none,
                 ),
               ),
@@ -297,7 +286,7 @@ class BookingScreen extends GetView<BookingController> {
                 width: double.infinity,
                 child: InputButton(
                   label: Text(
-                    'Continue Shopping',
+                    'Done',
                     style: Get.theme.textTheme.titleMedium?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
@@ -305,8 +294,10 @@ class BookingScreen extends GetView<BookingController> {
                   ),
                   labelColor:
                       Get.theme.textTheme.displaySmall!.color!.withOpacity(1),
-                  backgroundColor: Get.theme.cardColor,
-                  onPressed: () {},
+                  backgroundColor: Colors.blue,
+                  onPressed: () {
+                    Get.toNamed('/guestDashboard');
+                  },
                 ),
               ),
             ],

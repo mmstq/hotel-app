@@ -18,26 +18,20 @@ class RoomController extends GetxController {
     fetchRooms();
     super.onInit();
   }
-
-  // Fetch all rooms
   Future<void> fetchRooms() async {
     isLoading.value = true;
-    rooms.value = await provider.getRooms(); // Call provider to get all rooms
+    rooms.value = await provider.getRooms();
     isLoading.value = false;
   }
-
-  // Filter rooms by type
   Future<void> filterRoomsByType(String roomType) async {
     isLoading.value = true;
     if (roomType == 'All') {
-      rooms.value = await provider.getRooms(); // Fetch all rooms if filter is 'All'
+      rooms.value = await provider.getRooms();
     } else {
-      rooms.value = await provider.getRoomsByFilter('roomType', roomType); // Fetch filtered rooms
+      rooms.value = await provider.getRoomsByFilter('roomType', roomType);
     }
     isLoading.value = false;
   }
-
-  // Sort rooms by price
   Future<void> sortRoomsByPrice({bool descending = false}) async {
     isLoading.value = true;
     rooms.value = await provider.getRoomsByPrice(descending: descending); // Fetch sorted rooms
