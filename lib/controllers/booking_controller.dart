@@ -39,25 +39,25 @@ class BookingController extends GetxController {
     }
     isLoading.value = false;
   }
-  Future<void> bookRoom(Room room) async {
+
+  Future<void> bookRoom() async {
     isLoading.value = true;
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       String userEmail = currentUser.email ?? '';
       Booking newBooking = Booking(
         userEmail: userEmail,
-        roomId: room.id,
-        roomType: room.roomType!,
-        price: room.price,
-        checkInTime: room.checkInTime,
-        checkOutTime: room.checkOutTime,
-        amenities: room.amenities,
+        roomId: room!.id,
+        roomType: room!.roomType!,
+        price: room!.price,
+        checkInTime: room!.checkInTime,
+        checkOutTime: room!.checkOutTime,
+        amenities: room!.amenities,
         isBooked: true,
         paymentMethod: 'paymentMethod',
       );
       await _firestore.collection('room-booking').add(newBooking.toJson());
       Get.snackbar('Success', 'Room booked successfully');
-      fetchBookingHistory(); // Refresh booking history after booking
     } else {
       Get.snackbar('Error', 'You must be logged in to book a room');
     }

@@ -38,10 +38,18 @@ class BookingHistoryScreen extends GetView<BookingController> {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.grey.shade600,
+            boxShadow: [
+              BoxShadow(
+                color: Get.theme.dividerColor.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(1, 1),
+              ), // Shadow position (horizontal, vertical)
+            ],
+            color: Colors.white,
             borderRadius: BorderRadius.circular(20)),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -63,14 +71,18 @@ class BookingHistoryScreen extends GetView<BookingController> {
               ),
               const SizedBox(height: 4),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.chair, size: 16),
                   const SizedBox(width: 8),
-                  Text(
-                    'Amenities: ${booking.amenities}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      overflow: TextOverflow.ellipsis,
+                  Expanded(
+                    child: Text(
+                      'Amenities: ${booking.amenities!.join(' | ')}',
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ],

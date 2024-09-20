@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,16 +7,19 @@ import 'package:hotel_app/bindings/auth_binding.dart';
 import 'package:hotel_app/bindings/booking_binding.dart';
 import 'package:hotel_app/bindings/dashboard_binding.dart';
 import 'package:hotel_app/bindings/profile_binding.dart';
+import 'package:hotel_app/components/helper_functions.dart';
 import 'package:hotel_app/firebase_options.dart';
 import 'package:hotel_app/middleware/middle_ware.dart';
 import 'package:hotel_app/screens/guest_dashboard.dart';
 import 'package:hotel_app/screens/profile.dart';
 import 'package:hotel_app/screens/sign_up.dart';
+import 'package:logger/logger.dart';
 import 'screens/sign_in.dart';
 import 'screens/booking_screen.dart';
 import 'screens/booking_history.dart';
 import 'screens/account.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +27,9 @@ void main() async {
     name: 'Hotel App',
     options: DefaultFirebaseOptions.android,
   );
+  final email = FirebaseAuth.instance.currentUser?.email;
+  final user = await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get();
+  isStaff = user.docs.first.get('isStaff');
   runApp( const MyApp());
 }
 
@@ -34,7 +41,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Star Hotel',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
+      theme: ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.white,appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
       darkTheme: ThemeData.dark().copyWith(primaryColor: Colors.blue),
       initialBinding: AppBinding(),
       themeMode: ThemeMode.system,
