@@ -5,29 +5,22 @@ import 'package:hotel_app/components/text_field.dart';
 import 'package:hotel_app/components/button.dart';
 import '../controllers/auth_controller.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends GetView<AuthController> {
   const SignUpScreen({super.key});
 
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final AuthController authController = Get.put(AuthController());
 
-  final _formKey = GlobalKey<FormState>();
 
-  String userType = 'Guest';
 
   @override
   Widget build(BuildContext context) {
-    authController.clearFields();
+    controller.clearFields();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: Form(
-          key: _formKey, // Wrap the entire form in a Form widget
+          key: controller.formKey, // Wrap the entire form in a Form widget
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -75,47 +68,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     borderRadius: BorderRadius.circular(12)),
                 margin:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                child: Row(
+                child: Obx(()=>Row(
                   children: ['Staff', 'Guest']
                       .map((e) => Expanded(
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(16),
-                              onTap: () {
-                                setState(() {
-                                  userType = e;
-                                });
-                              },
-                              child: AnimatedContainer(
-                                curve: Curves.ease,
-                                duration: const Duration(milliseconds: 300),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: userType == e
-                                        ? Colors.blue
-                                        : Colors.transparent),
-                                child: Text(
-                                  e,
-                                  style: Get.textTheme.titleSmall!.copyWith(
-                                      fontWeight: userType == e
-                                          ? FontWeight.w700
-                                          : FontWeight.w400,
-                                      color: userType == e
-                                          ? Colors.white
-                                          : Colors.black87),
-                                ),
-                              ),
-                            ),
-                          ))
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        controller.userType.value = e;
+                      },
+                      child: AnimatedContainer(
+                        curve: Curves.ease,
+                        duration: const Duration(milliseconds: 300),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: controller.userType.value == e
+                                ? Colors.blue
+                                : Colors.transparent),
+                        child: Text(
+                          e,
+                          style: Get.textTheme.titleSmall!.copyWith(
+                              fontWeight: controller.userType.value == e
+                                  ? FontWeight.w700
+                                  : FontWeight.w400,
+                              color: controller.userType.value == e
+                                  ? Colors.white
+                                  : Colors.black87),
+                        ),
+                      ),
+                    ),
+                  ))
                       .toList(),
-                ),
+                )),
               ),
-
+              TextInputField(
+                label: 'Name',
+                prefixIcon: const Icon(Icons.title),
+                controller: controller.nameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
               // Email Input Field
               TextInputField(
                 label: 'Email',
                 prefixIcon: const Icon(Icons.alternate_email_outlined),
-                controller: authController.emailController,
+                controller: controller.emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
@@ -131,16 +133,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 20),
               Obx(
                 () => TextInputField(
-                  obscureText: !authController.showPassword.value,
+                  obscureText: !controller.showPassword.value,
                   label: 'Password',
                   prefixIcon: const Icon(Icons.key_outlined),
-                  controller: authController.passwordController,
+                  controller: controller.passwordController,
                   suffixIcon: IconButton(
                     highlightColor: Colors.transparent,
                     splashRadius: null,
                     splashColor: Colors.transparent,
                     padding: const EdgeInsets.all(0),
-                    icon: authController.showPassword.value
+                    icon: controller.showPassword.value
                         ? const Icon(
                             Icons.visibility_off,
                             color: Colors.blue,
@@ -150,8 +152,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             color: Colors.grey,
                           ),
                     onPressed: () {
-                      authController.showPassword.value =
-                          !authController.showPassword.value;
+                      controller.showPassword.value =
+                          !controller.showPassword.value;
                     },
                   ),
                   validator: (value) {
@@ -168,17 +170,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 20),
               InputButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate() &&
-                      !authController.isLoading.value) {
-                    authController.register(
-                      authController.emailController.text.trim(),
-                      authController.passwordController.text.trim(),
-                      userType == 'Guest'
+                  if (controller.formKey.currentState!.validate() &&
+                      !controller.isLoading.value) {
+                    controller.register(
+                      controller.emailController.text.trim(),
+                      controller.passwordController.text.trim(),
+                        controller.userType.value == 'Guest'
                     );
                   }
                 },
                 label: Obx(
-                  () => authController.isLoading.value
+                  () => controller.isLoading.value
                       ? const SizedBox(
                           width: 20,
                           height: 20,

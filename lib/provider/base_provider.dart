@@ -10,7 +10,6 @@ class BaseProvider{
     final ref = await firestore.collection('rooms').get();
     final rooms = <Room>[];
     for(var i in ref.docs){
-      Logger().d(i.data());
       rooms.add(Room.fromJson(i.data()));
     }
     return rooms;
@@ -20,7 +19,6 @@ class BaseProvider{
     final ref = await firestore.collection('rooms').where(searchBy, isEqualTo: searchValue).get();
     final rooms = <Room>[];
     for(var i in ref.docs){
-      Logger().d(i.data());
       rooms.add(Room.fromJson(i.data()));
     }
     return rooms;
@@ -30,7 +28,6 @@ class BaseProvider{
     final ref = await firestore.collection('rooms').orderBy('price', descending: descending).get();
     final rooms = <Room>[];
     for(var i in ref.docs){
-      Logger().d(i.data());
       rooms.add(Room.fromJson(i.data()));
     }
     return rooms;

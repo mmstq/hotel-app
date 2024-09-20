@@ -49,7 +49,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
               const Icon(Icons.calendar_today, size: 16),
               const SizedBox(width: 8),
               Text(
-                'Check-In: ${booking.checkinTime}',
+                'Check-In: ${booking.checkInTime}',
                 style: const TextStyle(fontSize: 14),
               ),
             ],
@@ -60,7 +60,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
               const Icon(Icons.calendar_today, size: 16),
               const SizedBox(width: 8),
               Text(
-                'Check-Out: ${booking.checkoutTime}',
+                'Check-Out: ${booking.checkOutTime}',
                 style: const TextStyle(fontSize: 14),
               ),
             ],

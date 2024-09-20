@@ -144,7 +144,7 @@ class _TextInputState extends State<TextInputField> {
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 fillColor: widget.enabled
                     ? widget.fillColor ?? Colors.grey.withOpacity(0.2)
-                    : Colors.grey,
+                    : Colors.grey.withOpacity(0.4),
                 labelText: widget.label,
                 labelStyle:
                     Get.textTheme.titleMedium!.copyWith(color: Colors.grey),

@@ -167,7 +167,7 @@ class DashboardScreen extends GetView<RoomController> {
               ),
               height: 40,
               onPressed: () {
-                Get.toNamed('/book-room', arguments: room);
+                Get.toNamed('/book-room', arguments: {'room':room});
               },
             ),
           ),

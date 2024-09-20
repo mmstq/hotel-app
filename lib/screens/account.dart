@@ -30,10 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 subtitle: const Text('Update your profile information'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileScreen()));
+                  Get.toNamed('/profile');
                 },
               ),
               ListTile(
@@ -41,12 +38,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 subtitle: const Text('Your past and upcoming bookings'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BookingHistoryScreen(),
-                    ),
-                  );
+                  Get.toNamed('/booking-history');
                 },
               ),
               SwitchListTile(

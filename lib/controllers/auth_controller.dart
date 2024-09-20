@@ -8,6 +8,10 @@ class AuthController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
+  RxString userType = 'Guest'.obs;
   RxBool showPassword = false.obs;
   RxBool isLoading = false.obs;
 
@@ -61,7 +65,8 @@ class AuthController extends GetxController {
             .doc(currentUser.uid)
             .set({
           'email': currentUser.email, // Email from Firebase Authentication
-          'role': isGuest, // Role passed during registration
+          'name': nameController.text, // Email from Firebase Authentication
+          'isStaff': userType.value=='Staff', // Role passed during registration
         });
         isLoading.value = false;
         Get.offAllNamed('/login');

@@ -6,22 +6,22 @@ class Booking {
   String? roomId;
   String? roomType;
   double? price;
-  Timestamp? checkinTime;
-  Timestamp? checkoutTime;
+  Timestamp? checkInTime;
+  Timestamp? checkOutTime;
   List<String>? amenities;
   bool? isBooked;
   String? paymentMethod;
 
   Booking({
-    required this.userEmail,
-    required this.roomId,
-    required this.roomType,
-    required this.price,
-    required this.checkinTime,
-    required this.checkoutTime,
-    required this.amenities,
-    required this.isBooked,
-    required this.paymentMethod,
+    this.userEmail,
+    this.roomId,
+    this.roomType,
+    this.price,
+    this.checkInTime,
+    this.checkOutTime,
+    this.amenities,
+    this.isBooked,
+    this.paymentMethod,
   });
 
   // Convert Booking object to JSON for Firestore
@@ -31,8 +31,8 @@ class Booking {
       'roomId': roomId,
       'roomType': roomType,
       'price': price,
-      'checkinTime': checkinTime, // Format time for saving
-      'checkoutTime': checkoutTime,
+      'checkinTime': checkInTime, // Format time for saving
+      'checkoutTime': checkOutTime,
       'amenities': amenities,
       'isBooked': isBooked,
       'paymentMethod': paymentMethod,
@@ -48,8 +48,8 @@ class Booking {
       roomType: json['roomType'],
       price: json['price'],
       amenities : json['amenities'].cast<String>(),
-      checkinTime : (json['checkinTime']as Timestamp),
-      checkoutTime : (json['checkoutTime']as Timestamp),
+      checkInTime : (json['checkinTime']),
+      checkOutTime : (json['checkoutTime']),
       isBooked: json['isBooked'],
       paymentMethod: json['paymentMethod'],
     );
