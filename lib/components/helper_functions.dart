@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import '../models/room.dart';
+
 bool isTablet() {
   // Getting the MediaQuery data from the context
   final mediaQuery = MediaQuery.of(Get.context!);
@@ -33,3 +35,5 @@ Future<void> checkIfStaff()async{
   isStaff = user.docs.first.get('isStaff') as bool;
   Logger().d(isStaff);
 }
+
+Room? roomAsArgument;

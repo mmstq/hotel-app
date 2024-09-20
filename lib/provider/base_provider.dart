@@ -5,8 +5,8 @@ import 'package:logger/logger.dart';
 class BaseProvider {
   final firestore = FirebaseFirestore.instance;
 
-  Future<List<Room>> getRooms() async {
-    final ref = await firestore.collection('rooms').where('isBooked', isEqualTo: false).get();
+  Future<List<Room>> getRooms({bool isBooked=false}) async {
+    final ref = await firestore.collection('rooms').where('isBooked', isEqualTo: isBooked).get();
     final rooms = <Room>[];
     for (var i in ref.docs) {
       rooms.add(Room.fromJson(i.data()));
@@ -14,9 +14,9 @@ class BaseProvider {
     return rooms;
   }
 
-  Future<List<Room>> getRoomsByFilter(String searchBy, String searchValue) async {
+  Future<List<Room>> getRoomsByFilter(String searchBy, String searchValue,{bool isBooked=false}) async {
 
-    final ref = await firestore.collection('rooms').where('isBooked', isEqualTo: false).where(searchBy, isEqualTo: searchValue).get();
+    final ref = await firestore.collection('rooms').where('isBooked', isEqualTo: isBooked).where(searchBy, isEqualTo: searchValue).get();
     final rooms = <Room>[];
     for (var i in ref.docs) {
       rooms.add(Room.fromJson(i.data()));
@@ -24,10 +24,10 @@ class BaseProvider {
     return rooms;
   }
 
-  Future<List<Room>> getRoomsByPrice({bool descending = false}) async {
+  Future<List<Room>> getRoomsByPrice({bool descending = false, bool isBooked=false}) async {
     final ref = await firestore
         .collection('rooms')
-        .where('isBooked', isEqualTo: false)
+        .where('isBooked', isEqualTo: isBooked)
         .orderBy('price', descending: descending)
         .get();
     final rooms = <Room>[];

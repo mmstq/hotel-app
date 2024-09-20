@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/components/button.dart';
+import 'package:hotel_app/components/helper_functions.dart';
 import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/screens/account.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -182,15 +184,22 @@ class DashboardScreen extends GetView<RoomController> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: InputButton(
                       label: Text(
-                        'Book Now',
+                        controller.isBooked?'Un-Book Now':'Book Now',
                         style: Get.theme.textTheme.titleMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       height: 32,
-                      onPressed: () {
-                        Get.toNamed('/book-room', arguments: {'room': room});
+                      onPressed: () async{
+                        if(controller.isBooked){
+                          FirebaseFirestore.instance.collection('rooms').doc(room.id).update({'isBooked':false});
+                          controller.fetchRooms();
+                          return;
+                        }else {
+                          roomAsArgument = room;
+                          Get.toNamed('/book-room', arguments: {'room': room});
+                        }
                       },
                     ),
                   ),

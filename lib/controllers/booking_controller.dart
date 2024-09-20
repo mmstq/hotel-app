@@ -6,9 +6,10 @@ import 'package:hotel_app/models/room.dart';
 import 'package:hotel_app/provider/base_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logger/logger.dart';
 
 class BookingController extends GetxController {
-  Room? room;
+  late Room room = roomAsArgument!;
   final formKey = GlobalKey<FormState>();
   var bookings = <Booking>[].obs;
   var isLoading = false.obs;
@@ -21,7 +22,6 @@ class BookingController extends GetxController {
 
   @override
   void onInit() {
-    room = Get.arguments?['room'] as Room?;
     fetchBookingHistory();
     super.onInit();
   }

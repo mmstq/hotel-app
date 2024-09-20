@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/components/button.dart';
 import 'package:intl/intl.dart';
 import '../controllers/booking_controller.dart';
 import '../models/booking.dart';
@@ -64,7 +66,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
                   ),
                   const Spacer(),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.blue.withOpacity(0.5)
@@ -74,6 +76,18 @@ class BookingHistoryScreen extends GetView<BookingController> {
                       style: const TextStyle(fontSize: 14),
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Icon(Icons.monetization_on, size: 16),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Room No: ${booking.roomId}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+
                 ],
               ),
               const SizedBox(height: 4),
@@ -114,6 +128,7 @@ class BookingHistoryScreen extends GetView<BookingController> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+
             ],
           ),
         ),

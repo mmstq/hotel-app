@@ -22,7 +22,6 @@ import 'screens/booking_history.dart';
 import 'screens/account.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -30,22 +29,26 @@ void main() async {
     options: DefaultFirebaseOptions.android,
   );
   await checkIfStaff();
-  runApp( const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   const MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Star Hotel',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(cardColor: Colors.white,primaryColor: Colors.blue, scaffoldBackgroundColor: Colors.white,appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
+      theme: ThemeData.light().copyWith(
+          cardColor: Colors.white,
+          primaryColor: Colors.blue,
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: AppBarTheme(backgroundColor: Colors.blue.shade50)),
       darkTheme: ThemeData.dark().copyWith(cardColor: Colors.grey.shade800, primaryColor: Colors.blue),
       initialBinding: AppBinding(),
       themeMode: ThemeMode.system,
-      initialRoute: '/guestDashboard',
+      initialRoute: isStaff ? '/bookedRooms' : '/guestDashboard',
       getPages: [
         GetPage(name: '/login', page: () => SignInScreen()),
         GetPage(name: '/signUP', page: () => const SignUpScreen(), binding: AuthBinding()),
@@ -88,7 +91,8 @@ class MyApp extends StatelessWidget {
           middlewares: [
             AuthMiddleware(),
           ],
-        ),GetPage(
+        ),
+        GetPage(
           name: '/bookedRooms',
           page: () => const BookedRoomsScreen(),
           binding: BookedRoomBinding(),
